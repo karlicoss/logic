@@ -309,3 +309,24 @@ theorem-deduction-t₂ T-AK = T-IM T-AK T-AK
 theorem-deduction-t₂ T-AS = T-IM T-AS T-AK
 theorem-deduction-t₂ (T-IM p p₁) = T-IM (theorem-deduction-t₂ p) (T-IM (theorem-deduction-t₂ p₁) T-AS)
 
+T-¬¬A→A : ∀ {Γ A} → Γ t⊢ (¬ (¬ A) ⊃ A)
+T-¬¬A→A {Γ} {A} = theorem-deduction-t (T-IM (T-AI {A = ¬ A}) (T-IM (T-IM (T-AΓ Z) T-AK) T-AN))
+
+data ⊥ : Set where
+
+_t⊬_ : List CPC → CPC → Set
+hl t⊬ a = (hl t⊢ a) → ⊥
+
+
+lemma-consistency : {A : CPC} → [] t⊢ A → [] t⊢ (¬ A) → ⊥
+lemma-consistency (T-AΓ ()) pn
+lemma-consistency T-AN (T-AΓ ())
+lemma-consistency T-AN (T-IM pn pn₁) = lemma-consistency T-AN (T-IM pn₁ (T-IM (T-IM pn pn₁) T-AK))
+lemma-consistency p pn = ?
+{- let xxx = T-IM pn pn₁
+     yyy = {!xxx!} 
+ in {!!} -} -- lemma-consistency p pn = {!!}
+
+lemma-[]⊬a : {a : V} → [] t⊬ (⋆ a)
+lemma-[]⊬a (T-AΓ ())
+lemma-[]⊬a {a} (T-IM t s) = {!!}

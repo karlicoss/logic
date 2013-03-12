@@ -292,11 +292,20 @@ connect-var p (S pin) = connect-var (lemma-proof-drop p) pin
 t→h : ∀ {Γ A} → Γ h⊢ A → Γ t⊢ A
 t→h (fst , snd) = connect-var snd Z
 
-theorem-deduction-t : ∀ {Γ A B} → A ∷ Γ t⊢ B → Γ t⊢ (A ⊃ B)
-theorem-deduction-t p = t→h (theorem-deduction-hl (h→t p))
-
 T-AI : ∀ {Γ A} → Γ t⊢ (A ⊃ A)
 T-AI {Γ} {A} = T-IM (T-AK {A = A} {B = A}) (T-IM (T-AK {A = A} {B = A ⊃ A}) (T-AS {A = A} {B = A ⊃ A} {C = A}))
 
 T-AI₂ : ∀ {Γ A} → Γ t⊢ (A ⊃ A)
 T-AI₂ {Γ} {A} = t→h (H-AI {Γ} {A})
+
+theorem-deduction-t : ∀ {Γ A B} → A ∷ Γ t⊢ B → Γ t⊢ (A ⊃ B)
+theorem-deduction-t p = t→h (theorem-deduction-hl (h→t p))
+
+theorem-deduction-t₂ : ∀ {Γ A B} → A ∷ Γ t⊢ B → Γ t⊢ (A ⊃ B)
+theorem-deduction-t₂ (T-AΓ Z) = T-AI
+theorem-deduction-t₂ (T-AΓ (S x)) = T-IM (T-AΓ x) T-AK
+theorem-deduction-t₂ T-AN = T-IM T-AN T-AK
+theorem-deduction-t₂ T-AK = T-IM T-AK T-AK
+theorem-deduction-t₂ T-AS = T-IM T-AS T-AK
+theorem-deduction-t₂ (T-IM p p₁) = T-IM (theorem-deduction-t₂ p) (T-IM (theorem-deduction-t₂ p₁) T-AS)
+

@@ -152,22 +152,6 @@ lemma-inproof {Γ} {((A ⊃ (B ⊃ C)) ⊃ .((A ⊃ B) ⊃ (A ⊃ C))) ∷ la} (
 lemma-inproof {Γ} {((¬ A ⊃ ¬ B) ⊃ .((¬ A ⊃ B) ⊃ A)) ∷ la} (S pin) (H-AN p) = lemma-inproof pin p
 lemma-inproof {Γ} {a ∷ la} (S pin) (H-IM x x₁ p) = lemma-inproof pin p
 
-{-
-lemma-lol₂ : ∀ {Γ la a} → a ∈ la → (Γ hl⊢ la) → Σ (List CPC) (λ ll → (Γ hl⊢ (a ∷ ll)) × (a ∷ ll ≤l la))
-lemma-lol₂ {Γ} {[]} () p
-lemma-lol₂ {Γ} {a ∷ la} Z p = la , (p ×i (lemma-same (a ∷ la)))
-lemma-lol₂ {Γ} {a ∷ la} {b} (S pin) (H-AΓ x p) with (lemma-lol₂ {Γ} {la} {b} pin p)
-lemma-lol₂ {Γ} {a₁ ∷ la} (S pin) (H-AΓ x₂ p) | fst , (x ×i y) = fst , (x ×i lemma-≤l-append y)
-lemma-lol₂ {Γ} {(A ⊃ (B ⊃ .A)) ∷ la} {b} (S pin) (H-AK p) with (lemma-lol₂ {Γ} {la} {b} pin p)
-lemma-lol₂ {Γ} {(A ⊃ (B ⊃ .A)) ∷ la} (S pin) (H-AK p) | fst , (x ×i y) = fst , (x ×i (lemma-≤l-append y))
-lemma-lol₂ {Γ} {((A ⊃ (B ⊃ C)) ⊃ .((A ⊃ B) ⊃ (A ⊃ C))) ∷ la} {b} (S pin) (H-AS p) with (lemma-lol₂ {Γ} {la} {b} pin p)
-lemma-lol₂ {Γ} {((A ⊃ (B ⊃ C)) ⊃ .((A ⊃ B) ⊃ (A ⊃ C))) ∷ la} (S pin) (H-AS p) | fst , (x ×i y) = fst , (x ×i (lemma-≤l-append y))
-lemma-lol₂ {Γ} {((¬ A ⊃ ¬ B) ⊃ .((¬ A ⊃ B) ⊃ A)) ∷ la} {b} (S pin) (H-AN p) with (lemma-lol₂ {Γ} {la} {b} pin p)
-lemma-lol₂ {Γ} {((¬ A ⊃ ¬ B) ⊃ .((¬ A ⊃ B) ⊃ A)) ∷ la} (S pin) (H-AN p) | fst , (x ×i y) = fst , (x ×i (lemma-≤l-append y))
-lemma-lol₂ {Γ} {a ∷ la} {b} (S pin) (H-IM x x₁ p) with (lemma-lol₂ {Γ} {la} {b} pin p)
-lemma-lol₂ {Γ} {a₁ ∷ la} (S pin) (H-IM x₂ x₃ p) | fst , (x ×i y) = fst , (x ×i (lemma-≤l-append y))
--}
-
 theorem-deduction-hl-revaux : ∀ {Γ la A B} → Γ hl⊢ (A ⊃ B) ∷ la → (A ∷ Γ) hl⊢ B ∷ A ∷ (A ⊃ B) ∷ la
 theorem-deduction-hl-revaux {Γ} {la} {A} {B} p = let pp = lemma-weakening {Γ} {(A ⊃ B) ∷ la} {A} p
                                                      pp' = H-AΓ {pl = (A ⊃ B) ∷ la} Z pp
@@ -238,30 +222,6 @@ theorem-deduction-hl : ∀ {Γ A B} → A ∷ Γ h⊢ B → Γ h⊢ (A ⊃ B)
 theorem-deduction-hl (fst , snd) with theorem-deduction-hlaux snd
 theorem-deduction-hl {Γ} {A} {B} (fst , snd) | fst₁ , (x ×i y) = lemma-inproof (y B Z) x
 
-{-
-theorem-deduction2 : ∀ {Γ A B} → A ∷ Γ h⊢ B → Γ h⊢ (A ⊃ B)
-theorem-deduction2 {Γ} {A} (fs , H-AΓ Z sn) = ((A ⊃ (A ⊃ A)) ⊃ (A ⊃ A)) ∷
-                                                ((A ⊃ ((A ⊃ A) ⊃ A)) ⊃ ((A ⊃ (A ⊃ A)) ⊃ (A ⊃ A))) ∷
-                                                (A ⊃ (A ⊃ A)) ∷ (A ⊃ ((A ⊃ A) ⊃ A)) ∷ [] , snd H-AI
-theorem-deduction2 {Γ} {A} {B} (fs , H-AΓ (S x) sn) = let xx = H-AΓ {A = B} x H-EM
-                                                          yy = H-AK {A = B} {B = A} xx
-                                                      in (B ⊃ (A ⊃ B)) ∷ B ∷ [] , H-IM Z (S Z) yy
-                                                          
-theorem-deduction2 {Γ} {A} (fs , H-AK sn) = {!!}
-theorem-deduction2 {Γ} {A} (fs , H-AS sn) = {!!}
-theorem-deduction2 {Γ} {A} (fs , H-AN sn) = {!!}
-theorem-deduction2 {Γ} {A} {B} (fs , H-IM {C} {.B} cbin cin sn) with lemma-lol₂ {Γ = A ∷ Γ} {fs} {a = C} cin sn 
-theorem-deduction2 {Γ} {A} {B} (fs , H-IM {C} {.B} cbin cin sn) | lc , (x ×i _) with lemma-lol₂ {Γ = A ∷ Γ} {fs} {a = C ⊃ B} cbin sn
-theorem-deduction2 {Γ} {A} {B} (fs , H-IM {C} {.B} cbin cin sn) | lc , (x ×i _) | lcb , (y ×i _) =
-  let (ldc , pdc) = theorem-deduction2 {Γ} {A} {C} (lc , x)
-      (ldcb , pdcb) = theorem-deduction2 {Γ} {A} {C ⊃ B} (lcb , y)
-      aaa = lemma-proof-concatt pdc pdcb
-      bbb = H-AS {A = A} {B = C} {C = B} aaa
-      ccc = H-IM Z (S (S Z)) bbb
-      ddd = H-IM Z (S (S Z)) ccc
-   in {!!} , ddd
--}
-
 data _t⊢_ (Γ : List CPC) : CPC → Set where
   T-AΓ : ∀ {A} → A ∈ Γ → Γ t⊢ A
   T-AN : ∀ {A B} → Γ t⊢ AN {A} {B}
@@ -317,16 +277,96 @@ data ⊥ : Set where
 _t⊬_ : List CPC → CPC → Set
 hl t⊬ a = (hl t⊢ a) → ⊥
 
+data Bool : Set where
+  true false : Bool
 
+data _b=_ : Bool → Bool → Set where
+  ET : true b= true
+  EF : false b= false
+  
+impl : Bool → Bool → Bool
+impl true false = false
+impl x y = true
+
+not : Bool → Bool
+not true = false
+not false = true
+
+eval : (V → Bool) → CPC → Bool
+eval sign (⋆ x) = sign x
+eval sign (f ⊃ f₁) = impl (eval sign f) (eval sign f₁)
+eval sign (¬ f) = not (eval sign f)
+
+c⊨_ : CPC → Set
+c⊨ f = (sign : V → Bool) → (eval sign f b= true) 
+
+lemma-taut-AN : ∀ {A B} → c⊨ AN {A} {B}
+lemma-taut-AN {A} {B} sign with eval sign A | eval sign B
+lemma-taut-AN sign | true | true = ET
+lemma-taut-AN sign | true | false = ET
+lemma-taut-AN sign | false | true = ET
+lemma-taut-AN sign | false | false = ET
+
+lemma-taut-AK : ∀ {A B} → c⊨ AK {A} {B}
+lemma-taut-AK {A} {B} sign with eval sign A | eval sign B
+lemma-taut-AK sign | true | true = ET
+lemma-taut-AK sign | true | false = ET
+lemma-taut-AK sign | false | true = ET
+lemma-taut-AK sign | false | false = ET
+
+lemma-taut-AS : ∀ {A B C} → c⊨ AS {A} {B} {C}
+lemma-taut-AS {A} {B} {C} sign with eval sign A | eval sign B | eval sign C
+lemma-taut-AS sign | true | true | true = ET
+lemma-taut-AS sign | true | true | false = ET
+lemma-taut-AS sign | true | false | true = ET
+lemma-taut-AS sign | true | false | false = ET
+lemma-taut-AS sign | false | true | true = ET
+lemma-taut-AS sign | false | true | false = ET
+lemma-taut-AS sign | false | false | true = ET
+lemma-taut-AS sign | false | false | false = ET
+
+lemma-taut-IM : ∀ {A B} → c⊨ A → c⊨ (A ⊃ B) → c⊨ B
+lemma-taut-IM {A} {B} ta tab sign with ta sign | tab sign
+... | ea | eab with eval sign A | eval sign B
+lemma-taut-IM ta tab sign | ea | eab | true | true = eab
+lemma-taut-IM ta tab sign | ea | eab | true | false = eab
+lemma-taut-IM ta tab sign | ea | eab | false | true = eab
+lemma-taut-IM ta tab sign | ea | eab | false | false = ea
+
+theorem-soundness : ∀ {A} → [] t⊢ A → c⊨ A
+theorem-soundness (T-AΓ ()) sign
+theorem-soundness (T-AN {A} {B}) sign = lemma-taut-AN {A} {B} sign
+theorem-soundness (T-AK {A} {B}) sign = lemma-taut-AK {A} {B} sign
+theorem-soundness (T-AS {A} {B} {C}) sign = lemma-taut-AS {A} {B} {C} sign
+theorem-soundness (T-IM {A} {B} p p₁) sign = lemma-taut-IM {A} {B} (theorem-soundness p) (theorem-soundness p₁) sign
+
+{-
+lemma-consistency₂ : ∀ {A} → [] h⊢ A → [] h⊢ (¬ A) → ⊥
+lemma-consistency₂ {A} (.pl , H-AΓ {.A} {pl} x p₁) (.pl₁ , H-AΓ {.(¬ A)} {pl₁} () p₂)
+lemma-consistency₂ {A} (.pl , H-AΓ {.A} {pl} x p₁) (.pl₁ , H-IM {A₁} {.(¬ A)} {pl₁} x₁ x₂ p₂) = {!!}
+lemma-consistency₂ (s₁ , H-AK p₁) (s₂ , H-AΓ () p₂)
+lemma-consistency₂ (s₁ , H-AK p₁) (s₂ , H-IM x x₁ p₂) = {!!}
+lemma-consistency₂ (s₁ , H-AS p₁) (s₂ , H-AΓ x p₂) = {!!}
+lemma-consistency₂ (s₁ , H-AS p₁) (s₂ , H-IM x x₁ p₂) = {!!}
+lemma-consistency₂ (s₁ , H-AN p₁) (s₂ , H-AΓ x p₂) = {!!}
+lemma-consistency₂ (s₁ , H-AN p₁) (s₂ , H-IM x x₁ p₂) = {!!}
+lemma-consistency₂ {A} (.pl , H-IM {A₁} {.A} {pl} x x₁ p₁) (.pl₁ , H-AΓ {.(¬ A)} {pl₁} x₂ p₂) = {!!}
+lemma-consistency₂ {A} (.pl , H-IM {A₁} {.A} {pl} x x₁ p₁) (.pl₁ , H-IM {A₂} {.(¬ A)} {pl₁} x₂ x₃ p₂) = {!!}
+-}
+
+{-
 lemma-consistency : {A : CPC} → [] t⊢ A → [] t⊢ (¬ A) → ⊥
 lemma-consistency (T-AΓ ()) pn
 lemma-consistency T-AN (T-AΓ ())
-lemma-consistency T-AN (T-IM pn pn₁) = lemma-consistency T-AN (T-IM pn₁ (T-IM (T-IM pn pn₁) T-AK))
-lemma-consistency p pn = ?
+lemma-consistency T-AN (T-IM pn pn₁) = {!!} -- lemma-consistency T-AN (T-IM pn₁ (T-IM (T-IM pn pn₁) T-AK))
+lemma-consistency p pn = {!!}
+-}
 {- let xxx = T-IM pn pn₁
      yyy = {!xxx!} 
  in {!!} -} -- lemma-consistency p pn = {!!}
 
+{-
 lemma-[]⊬a : {a : V} → [] t⊬ (⋆ a)
 lemma-[]⊬a (T-AΓ ())
 lemma-[]⊬a {a} (T-IM t s) = {!!}
+-}

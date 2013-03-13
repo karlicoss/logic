@@ -340,6 +340,13 @@ theorem-soundness (T-AK {A} {B}) sign = lemma-taut-AK {A} {B} sign
 theorem-soundness (T-AS {A} {B} {C}) sign = lemma-taut-AS {A} {B} {C} sign
 theorem-soundness (T-IM {A} {B} p p₁) sign = lemma-taut-IM {A} {B} (theorem-soundness p) (theorem-soundness p₁) sign
 
+theorem-consistency : ∀ {A} → [] t⊢ A → [] t⊢ ¬ A → ⊥
+theorem-consistency {A} p pn with theorem-soundness p | theorem-soundness pn
+... | x | y with x (λ sign → false) | y (λ sign → false)
+... | xx | yy with eval (λ sign → false) A
+theorem-consistency p pn | x | y | xx | () | true
+theorem-consistency p pn | x | y | () | yy | false
+
 {-
 lemma-consistency₂ : ∀ {A} → [] h⊢ A → [] h⊢ (¬ A) → ⊥
 lemma-consistency₂ {A} (.pl , H-AΓ {.A} {pl} x p₁) (.pl₁ , H-AΓ {.(¬ A)} {pl₁} () p₂)

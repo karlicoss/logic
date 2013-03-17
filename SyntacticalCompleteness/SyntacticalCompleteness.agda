@@ -258,6 +258,9 @@ T-AI {Γ} {A} = T-IM (T-AK {A = A} {B = A}) (T-IM (T-AK {A = A} {B = A ⊃ A}) (
 T-AI₂ : ∀ {Γ A} → Γ t⊢ (A ⊃ A)
 T-AI₂ {Γ} {A} = t→h (H-AI {Γ} {A})
 
+theorem-deduction-rev-t : ∀ {Γ A B} → Γ t⊢ (A ⊃ B) → A ∷ Γ t⊢ B
+theorem-deduction-rev-t p = t→h (theorem-deduction-hl-rev (h→t p))
+
 theorem-deduction-t : ∀ {Γ A B} → A ∷ Γ t⊢ B → Γ t⊢ (A ⊃ B)
 theorem-deduction-t p = t→h (theorem-deduction-hl (h→t p))
 
@@ -269,8 +272,11 @@ theorem-deduction-t₂ T-AK = T-IM T-AK T-AK
 theorem-deduction-t₂ T-AS = T-IM T-AS T-AK
 theorem-deduction-t₂ (T-IM p p₁) = T-IM (theorem-deduction-t₂ p) (T-IM (theorem-deduction-t₂ p₁) T-AS)
 
-T-¬¬A→A : ∀ {Γ A} → Γ t⊢ (¬ (¬ A) ⊃ A)
-T-¬¬A→A {Γ} {A} = theorem-deduction-t (T-IM (T-AI {A = ¬ A}) (T-IM (T-IM (T-AΓ Z) T-AK) T-AN))
+lemma-elim¬¬ : ∀ {Γ A} → Γ t⊢ (¬ (¬ A) ⊃ A)
+lemma-elim¬¬ {Γ} {A} = theorem-deduction-t (T-IM (T-AI {A = ¬ A}) (T-IM (T-IM (T-AΓ Z) T-AK) T-AN))
+
+lemma-intro¬¬ : ∀ {Γ A} → Γ t⊢ (A ⊃ ¬ (¬ A))
+lemma-intro¬¬ {Γ} {A} = theorem-deduction-t {!!}
 
 data ⊥ : Set where
 
@@ -340,6 +346,10 @@ theorem-soundness (T-AK {A} {B}) sign = lemma-taut-AK {A} {B} sign
 theorem-soundness (T-AS {A} {B} {C}) sign = lemma-taut-AS {A} {B} {C} sign
 theorem-soundness (T-IM {A} {B} p p₁) sign = lemma-taut-IM {A} {B} (theorem-soundness p) (theorem-soundness p₁) sign
 
+bot-elim : (A : Set) → ⊥ → A
+bot-elim a ()
+
+-- Both A and ¬ A cannot be derived
 theorem-consistency : ∀ {A} → [] t⊢ A → [] t⊢ ¬ A → ⊥
 theorem-consistency {A} p pn with theorem-soundness p | theorem-soundness pn
 ... | x | y with x (λ sign → false) | y (λ sign → false)
@@ -347,30 +357,92 @@ theorem-consistency {A} p pn with theorem-soundness p | theorem-soundness pn
 theorem-consistency p pn | x | y | xx | () | true
 theorem-consistency p pn | x | y | () | yy | false
 
-{-
-lemma-consistency₂ : ∀ {A} → [] h⊢ A → [] h⊢ (¬ A) → ⊥
-lemma-consistency₂ {A} (.pl , H-AΓ {.A} {pl} x p₁) (.pl₁ , H-AΓ {.(¬ A)} {pl₁} () p₂)
-lemma-consistency₂ {A} (.pl , H-AΓ {.A} {pl} x p₁) (.pl₁ , H-IM {A₁} {.(¬ A)} {pl₁} x₁ x₂ p₂) = {!!}
-lemma-consistency₂ (s₁ , H-AK p₁) (s₂ , H-AΓ () p₂)
-lemma-consistency₂ (s₁ , H-AK p₁) (s₂ , H-IM x x₁ p₂) = {!!}
-lemma-consistency₂ (s₁ , H-AS p₁) (s₂ , H-AΓ x p₂) = {!!}
-lemma-consistency₂ (s₁ , H-AS p₁) (s₂ , H-IM x x₁ p₂) = {!!}
-lemma-consistency₂ (s₁ , H-AN p₁) (s₂ , H-AΓ x p₂) = {!!}
-lemma-consistency₂ (s₁ , H-AN p₁) (s₂ , H-IM x x₁ p₂) = {!!}
-lemma-consistency₂ {A} (.pl , H-IM {A₁} {.A} {pl} x x₁ p₁) (.pl₁ , H-AΓ {.(¬ A)} {pl₁} x₂ p₂) = {!!}
-lemma-consistency₂ {A} (.pl , H-IM {A₁} {.A} {pl} x x₁ p₁) (.pl₁ , H-IM {A₂} {.(¬ A)} {pl₁} x₂ x₃ p₂) = {!!}
--}
+-- Ex falso quodlibet or the principle of explosion
+-- From contradicion follows anything
+lemma-inc⊢any : ∀ {A B} → [] t⊢ A → [] t⊢ ¬ A → [] t⊢ B
+lemma-inc⊢any {A} {B} p pn = bot-elim ([] t⊢ B) (theorem-consistency p pn)
 
-{-
-lemma-consistency : {A : CPC} → [] t⊢ A → [] t⊢ (¬ A) → ⊥
-lemma-consistency (T-AΓ ()) pn
-lemma-consistency T-AN (T-AΓ ())
-lemma-consistency T-AN (T-IM pn pn₁) = {!!} -- lemma-consistency T-AN (T-IM pn₁ (T-IM (T-IM pn pn₁) T-AK))
-lemma-consistency p pn = {!!}
--}
-{- let xxx = T-IM pn pn₁
-     yyy = {!xxx!} 
- in {!!} -} -- lemma-consistency p pn = {!!}
+_∨_ : CPC → CPC → CPC
+a ∨ b = ¬ a ⊃ b
+
+_∧_ : CPC → CPC → CPC
+a ∧ b = ¬ (a ⊃ ¬ b)
+--a ∧ b = ¬ (¬ a ∨ ¬ b)
+
+and : Bool → Bool → Bool
+and true true = true
+and true false = false
+and false true = false
+and false false = false
+
+or : Bool → Bool → Bool
+or true true = true
+or true false = true
+or false true = true
+or false false = false
+
+lemma-∨-good : ∀ {A B e} → eval e (A ∨ B) b= or (eval e A) (eval e B)
+lemma-∨-good {A} {B} {e} with eval e A | eval e B
+lemma-∨-good | true | true = ET
+lemma-∨-good | true | false = ET
+lemma-∨-good | false | true = ET
+lemma-∨-good | false | false = EF
+
+lemma-∧-good : ∀ {A B e} → eval e (A ∧ B) b= and (eval e A) (eval e B)
+lemma-∧-good {A} {B} {e} with eval e A | eval e B
+lemma-∧-good | true | true = ET
+lemma-∧-good | true | false = EF
+lemma-∧-good | false | true = EF
+lemma-∧-good | false | false = EF
+
+lemma-∨-comm : ∀ {Γ A B} → Γ t⊢ (A ∨ B) → Γ t⊢ (B ∨ A)
+lemma-∨-comm {Γ} {A} {B} p = {!!}
+
+lemma-∨-leftfalse : ∀ {Γ A B} → Γ t⊢ (A ∨ B) → Γ t⊢ ¬ A → Γ t⊢ B
+lemma-∨-leftfalse {Γ} {A} {B} p pna = T-IM pna p
+
+lemma-∨-rightfalse : ∀ {Γ A B} → Γ t⊢ (A ∨ B) → Γ t⊢ ¬ B → Γ t⊢ A
+lemma-∨-rightfalse {Γ} {A} {B} p pnb = T-IM p (T-IM (T-IM pnb T-AK) T-AN)
+
+lemma-syll : ∀ {Γ A B C} → (A ⊃ B) ∷ (B ⊃ C) ∷ Γ t⊢ (A ⊃ C)
+lemma-syll {Γ} {A} {B} {C} =
+  let nc = A ∷ (A ⊃ B) ∷ (B ⊃ C) ∷ Γ
+  in theorem-deduction-t (T-IM {A = B} {B = C} (T-IM {A = A} {B = B} (T-AΓ Z) (T-AΓ (S Z))) (T-AΓ {Γ = nc} (S (S Z))))
+
+lemma-true-consequent : ∀ {Γ A B} → Γ t⊢ B → Γ t⊢ (A ⊃ B)
+lemma-true-consequent {Γ} {A} {B} pb = T-IM pb T-AK
+
+lemma-proof-replace-equiv : ∀ {Γ A B C} → B ∷ Γ t⊢ C → Γ t⊢ (A ⊃ B) → A ∷ Γ t⊢ C
+lemma-proof-replace-equiv (T-AΓ Z) pf = theorem-deduction-rev-t pf
+lemma-proof-replace-equiv (T-AΓ (S x)) pf = T-AΓ (S x)
+lemma-proof-replace-equiv T-AN pf = T-AN
+lemma-proof-replace-equiv T-AK pf = T-AK
+lemma-proof-replace-equiv T-AS pf = T-AS
+lemma-proof-replace-equiv (T-IM p p₁) pf = T-IM (lemma-proof-replace-equiv p pf) (lemma-proof-replace-equiv p₁ pf)
+
+lemma-⊃-trash : ∀ {Γ A B} → (A ⊃ B) ∷ Γ t⊢ (¬ (¬ A) ⊃ B)
+lemma-⊃-trash {Γ} {A} {B} =
+  let Γ₂ = A ∷ (A ⊃ B) ∷ Γ
+      ll = theorem-deduction-t {!!}
+  in theorem-deduction-t {! (T-IM {Γ = Γ₂} {A = A} {B = B} (T-AΓ {Γ = Γ₂} {!!}) (T-AΓ {Γ = Γ₂} {!!})) !}
+
+lemma-modus-tollens : ∀ {Γ A B} → (A ⊃ B) ∷ ¬ B ∷ Γ t⊢ ¬ A
+lemma-modus-tollens {Γ} {A} {B} =
+  let Γ₂ = ¬ B ∷ Γ
+  in lemma-∨-rightfalse {A = ¬ A} {B = B} {!!} (T-AΓ (S Z)) 
+  
+lemma-⊃-transpose : ∀ {Γ A B} → ((A ⊃ B) ∷ Γ) t⊢ (¬ B ⊃ ¬ A)
+lemma-⊃-transpose {Γ} {A} {B} = {!!}
+
+lemma-false-antecedent : ∀ {Γ A B} → (¬ A ∷ Γ) t⊢ (A ⊃ B)
+lemma-false-antecedent {Γ} {A} {B} = {!!}
+
+lemma-true-antecedent : ∀ {Γ A B} → ((¬ (A ⊃ B)) ∷ Γ) t⊢ A
+lemma-true-antecedent {Γ} {A} {B} = {!!}
+
+lemma-elim∧-left : ∀ {Γ A B} → ((A ∧ B) ∷ Γ) t⊢ A
+lemma-elim∧-left {Γ} {A} {B} = lemma-true-antecedent {A = A} {B = ¬ B}
+
 
 {-
 lemma-[]⊬a : {a : V} → [] t⊬ (⋆ a)

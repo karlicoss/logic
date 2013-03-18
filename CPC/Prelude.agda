@@ -1,5 +1,22 @@
 module Prelude where
 
+infix 10 _≡_
+data _≡_ {A : Set} (x : A) : A → Set where
+  refl : x ≡ x
+
+sym : ∀ {A} {a b : A} → a ≡ b → b ≡ a
+sym refl = refl
+
+trans : ∀ {A} {a b c : A} → a ≡ b → b ≡ c → a ≡ c
+trans refl refl = refl
+
+infixr 5 _~_
+_~_ : {A : Set}{a b c : A} → a ≡ b → b ≡ c → a ≡ c
+_~_ = trans
+
+cong : ∀ {A B} {a b : A} → (f : A → B) → a ≡ b → (f a) ≡ (f b)
+cong f refl = refl
+
 infixr 40 _∷_
 data List (A : Set) : Set where
   [] : List A                            -- an empty list
@@ -74,3 +91,32 @@ true b∨ true = true
 true b∨ false = true
 false b∨ true = true
 false b∨ false = false
+
+data ℕ : Set where
+  zero : ℕ
+  succ : ℕ → ℕ
+
+_n+_ : ℕ → ℕ → ℕ
+zero n+ b = b
+(succ a) n+ b = succ (a n+ b)
+
+lemma-zero-right : ∀ {a} → a ≡ (a n+ zero)
+lemma-zero-right {zero} = refl
+lemma-zero-right {succ a} = cong succ lemma-zero-right
+
+lemma-succ-left : ∀ {a b} → a n+ succ b ≡ succ (a n+ b)
+lemma-succ-left {zero} {b} = refl
+lemma-succ-left {succ a} {b} = cong succ (lemma-succ-left {a = a} {b = b})
+
+lemma-succ-right : ∀ {a b} → (succ a) n+ b ≡ succ (a n+ b)
+lemma-succ-right {a} {b} = refl
+
+lemma-n+-comm : ∀ {a} {b} → (a n+ b) ≡ (b n+ a)
+lemma-n+-comm {zero} {zero} = refl
+lemma-n+-comm {zero} {succ b} = cong succ lemma-zero-right
+lemma-n+-comm {succ a} {zero} = cong succ (sym lemma-zero-right)
+lemma-n+-comm {succ a} {succ b} = cong succ (lemma-succ-left {a = a} {b = b} ~ sym (lemma-n+-comm {a = b} {b = succ a} ~ lemma-succ-right {a = a} {b = b}))
+
+lemma-n+-assoc : ∀ {a b c} → (a n+ (b n+ c)) ≡ ((a n+ b) n+ c)
+lemma-n+-assoc {zero} {b} {c} = refl
+lemma-n+-assoc {succ a} {b} {c} = cong succ (lemma-n+-assoc {a = a} {b = b} {c = c})

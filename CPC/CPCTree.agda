@@ -270,6 +270,7 @@ lemma-proof-drop-redundant {Γ} {A} {B} pa pna =
       b∨b = lemma-∨-ololo {Γ} {A} {B} {B} xa xb 
   in T-IM b∨b lemma-∨-elim
 
+-- is it true at all?
 lemma-invalid⊨-any : ∀ {A B} → c⊮ A → A ∷ [] t⊢ B
 lemma-invalid⊨-any {A} {B} inv = {!!}
 
@@ -279,6 +280,7 @@ lemma-invalid-var : ∀ {v} → c⊮ ⋆ v
 lemma-invalid-var {v} ev with ev (λ v → false)
 lemma-invalid-var ev | ()
 
+-- what do I want to prove here?
 lemma-completeness-¬ : ∀ {A} → (V → Bool) → [] t⊢ ¬ A
 lemma-completeness-¬ {A} ev with eval ev A
 lemma-completeness-¬ {A} ev | true = {!!}

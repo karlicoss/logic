@@ -307,6 +307,9 @@ eval sign (¬ f) = not (eval sign f)
 c⊨_ : CPC → Set
 c⊨ f = (sign : V → Bool) → (eval sign f b= true) 
 
+c⊮_ : CPC → Set
+c⊮ f = (c⊨ f) → ⊥
+
 lemma-taut-AN : ∀ {A B} → c⊨ AN {A} {B}
 lemma-taut-AN {A} {B} sign with eval sign A | eval sign B
 lemma-taut-AN sign | true | true = ET
@@ -416,6 +419,14 @@ lemma-proof-replace-equiv T-AN pf = T-AN
 lemma-proof-replace-equiv T-AK pf = T-AK
 lemma-proof-replace-equiv T-AS pf = T-AS
 lemma-proof-replace-equiv (T-IM p p₁) pf = T-IM (lemma-proof-replace-equiv p pf) (lemma-proof-replace-equiv p₁ pf)
+
+lemma-proof-donotneed : ∀ {Γ A B} → A ∷ Γ t⊢ B → Γ t⊢ A → Γ t⊢ B
+lemma-proof-donotneed (T-AΓ Z) pa = pa
+lemma-proof-donotneed (T-AΓ (S x)) pa = T-AΓ x
+lemma-proof-donotneed T-AN pa = T-AN
+lemma-proof-donotneed T-AK pa = T-AK
+lemma-proof-donotneed T-AS pa = T-AS
+lemma-proof-donotneed (T-IM pb pb₁) pa = T-IM (lemma-proof-donotneed pb pa) (lemma-proof-donotneed pb₁ pa)
 
 -- lemma-⊃-ololo : ∀ {Γ A B} → Γ t⊢ (¬ (¬ A) ⊃ B) ⊃ (A ⊃ B)
 -- lemma-⊃-ololo {Γ} {A} {B} =
@@ -546,8 +557,60 @@ lemma-∨-comm {Γ} {A} {B} p =
       pnb = theorem-deduction-t (T-AΓ (S Z))
       nna = lemma-contradiction pb pnb
   in theorem-deduction-t (T-IM nna lemma-elim¬¬)
+
+lemma-∨-elim : ∀ {Γ A} → Γ t⊢ (A ∨ A) ⊃ A
+lemma-∨-elim {Γ} {A} =
+  let Γ₂ = ¬ A ⊃ A ∷ Γ
+      xx : Γ₂ t⊢ (¬ A ⊃ A) ⊃ ((¬ A ⊃ ¬ A) ⊃ ¬ (¬ A))
+      xx = T-ANn
+      yy : Γ₂ t⊢ (¬ A ⊃ ¬ A) ⊃ ¬ (¬ A)
+      yy = T-IM (T-AΓ Z) xx
+  in theorem-deduction-t (T-IM (T-IM T-AI yy) lemma-elim¬¬)
+  
+lemma-excluded-middle : ∀ {Γ A} → Γ t⊢ A ∨ ¬ A
+lemma-excluded-middle {Γ} {A} = T-AI
 {-
 lemma-[]⊬a : {a : V} → [] t⊬ (⋆ a)
 lemma-[]⊬a (T-AΓ ())
 lemma-[]⊬a {a} (T-IM t s) = {!!}
 -}
+
+lemma-∨-alala : ∀ {Γ A B} → A ∨ ¬ A ∷ Γ t⊢ B → Γ t⊢ B
+lemma-∨-alala {Γ} {A} {B} p = lemma-proof-donotneed p T-AI
+
+lemma-∨-ololo : ∀ {Γ A B C} → Γ t⊢ A ⊃ B → Γ t⊢ ¬ A ⊃ C → Γ t⊢ B ∨ C
+lemma-∨-ololo {Γ} {A} {B} {C} pb pc with theorem-deduction-rev-t pb | theorem-deduction-rev-t pc
+... | xx | yy = {!!}
+
+lemma-∨-azaza : ∀ {Γ A B C} → A ∷ Γ t⊢ C → B ∷ Γ t⊢ C → A ∨ B ∷ Γ t⊢ C
+lemma-∨-azaza {Γ} {A} {B} {C} pa pb = {!!}
+
+lemma-proof-drop-redundant : ∀ {Γ A B} → A ∷ Γ t⊢ B → ¬ A ∷ Γ t⊢ B → Γ t⊢ B
+lemma-proof-drop-redundant {Γ} {A} {B} pa pna =
+  let xa : Γ t⊢ A ⊃ B
+      xa = theorem-deduction-t pa
+      xb : Γ t⊢ ¬ A ⊃ B
+      xb = theorem-deduction-t pna
+      b∨b : Γ t⊢ B ∨ B
+      b∨b = lemma-∨-ololo {Γ} {A} {B} {B} xa xb 
+  in T-IM b∨b lemma-∨-elim
+
+lemma-invalid⊨-any : ∀ {A B} → c⊮ A → A ∷ [] t⊢ B
+lemma-invalid⊨-any {A} {B} inv = {!!}
+
+-- lemma-composition : ∀ 
+
+lemma-invalid-var : ∀ {v} → c⊮ ⋆ v
+lemma-invalid-var {v} ev with ev (λ v → false)
+lemma-invalid-var ev | ()
+
+lemma-completeness-¬ : ∀ {A} → (V → Bool) → [] t⊢ ¬ A
+lemma-completeness-¬ {A} ev with eval ev A
+lemma-completeness-¬ {A} ev | true = {!!}
+lemma-completeness-¬ {A} ev | false = {!!}
+
+theorem-completeness : ∀ {A} → c⊨ A → [] t⊢ A
+theorem-completeness {⋆ x} taut with lemma-invalid-var taut
+theorem-completeness {⋆ x} taut | ()
+theorem-completeness {A ⊃ B} taut = {!!}
+theorem-completeness {¬ A} taut = {!!}

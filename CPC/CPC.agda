@@ -1,62 +1,12 @@
 module CPC where
 
-infixr 40 _∷_
-data List (A : Set) : Set where
-  [] : List A                            -- an empty list
-  _∷_ : (a : A) → (as : List A) → List A -- "cons" -- creates a new list with "a" in the head
-                                           -- and "as" in the tail
-
--- appending two lists
-_++_ : ∀ {A} → List A → List A → List A
-[] ++ bs = bs
-(a ∷ as) ++ bs = a ∷ (as ++ bs)
-  
-data _∈_ {A : Set} : A → List A → Set where
-  Z : {a : A}{as : List A} → a ∈ (a ∷ as)            -- "a" is in a head of a list
-  S : {a b : A}{as : List A} → a ∈ as → a ∈ (b ∷ as) -- "a" is in a tail somewhere
-
-infix 40 _≤l_
-
-data _≤l_ {A : Set} : List A → List A → Set where
-  Z≤l : {al : List A} → [] ≤l al
-  S≤l : {a b : A} {al bl : List A} → al ≤l bl → (a ∷ al) ≤l (b ∷ bl)
-
-lemma-same : ∀ {A} → (la : List A) → la ≤l la
-lemma-same [] = Z≤l
-lemma-same (a ∷ la) = S≤l (lemma-same la)
-
-lemma-≤l-append : ∀ {A} {la lb : List A} {a : A} → la ≤l lb → la ≤l a ∷ lb
-lemma-≤l-append Z≤l = Z≤l
-lemma-≤l-append (S≤l p) = S≤l (lemma-≤l-append p)
-
--- if x is in as then it is in bs appended to as
-relax-right : ∀ {A} {x : A} {as bs} → x ∈ as → x ∈ (as ++ bs)
-relax-right Z = Z
-relax-right (S y) = S (relax-right y)
-
--- similarly, but if x is in bs
-relax-left : ∀ {A} {x : A} as {bs} → x ∈ bs → x ∈ (as ++ bs)
-relax-left [] p = p
-relax-left (a ∷ as) p = S (relax-left as p)
-
-record Σ (A : Set) (B : A → Set) : Set where
-  constructor _,_
-  field
-    fst : A
-    snd : B fst
-
-open Σ public
-
-infix 40 _×_
-
-data _×_ (P : Set) (Q : Set) : Set where
-  _×i_ : P → Q → P × Q
+open import Prelude
 
 data V : Set where
   varA varB varC varD varE : V
 
-infix 50 _∨_
-infix 60 _⊃_
+infix 50 _⊃_
+infix 60 _∨_
 infix 70 _∧_
   
 data CPC : Set where
@@ -279,30 +229,14 @@ theorem-deduction-t₂ (T-IM p p₁) = T-IM (theorem-deduction-t₂ p) (T-IM (th
 lemma-elim¬¬ : ∀ {Γ A} → Γ t⊢ (¬ (¬ A) ⊃ A)
 lemma-elim¬¬ {Γ} {A} = theorem-deduction-t (T-IM (T-AI {A = ¬ A}) (T-IM (T-IM (T-AΓ Z) T-AK) T-AN))
 
-data ⊥ : Set where
 
 _t⊬_ : List CPC → CPC → Set
 hl t⊬ a = (hl t⊢ a) → ⊥
 
-data Bool : Set where
-  true false : Bool
-
-data _b=_ : Bool → Bool → Set where
-  ET : true b= true
-  EF : false b= false
-  
-impl : Bool → Bool → Bool
-impl true false = false
-impl x y = true
-
-not : Bool → Bool
-not true = false
-not false = true
-
 eval : (V → Bool) → CPC → Bool
 eval sign (⋆ x) = sign x
-eval sign (f ⊃ f₁) = impl (eval sign f) (eval sign f₁)
-eval sign (¬ f) = not (eval sign f)
+eval sign (f ⊃ f₁) = (eval sign f) b⊃ (eval sign f₁)
+eval sign (¬ f) = b¬ (eval sign f)
 
 c⊨_ : CPC → Set
 c⊨ f = (sign : V → Bool) → (eval sign f b= true) 
@@ -356,9 +290,6 @@ lemma-empty-sound x ()
 theorem-soundness : ∀ {A} → [] t⊢ A → c⊨ A
 theorem-soundness {A} p = theorem-soundness₂ {Γ = []} {A} lemma-empty-sound p
 
-bot-elim : (A : Set) → ⊥ → A
-bot-elim a ()
-
 -- Both A and ¬ A cannot be derived
 theorem-consistency : ∀ {A} → [] t⊢ A → [] t⊢ ¬ A → ⊥
 theorem-consistency {A} p pn with theorem-soundness p | theorem-soundness pn
@@ -374,26 +305,14 @@ _∧_ : CPC → CPC → CPC
 a ∧ b = ¬ (a ⊃ ¬ b)
 --a ∧ b = ¬ (¬ a ∨ ¬ b)
 
-and : Bool → Bool → Bool
-and true true = true
-and true false = false
-and false true = false
-and false false = false
-
-or : Bool → Bool → Bool
-or true true = true
-or true false = true
-or false true = true
-or false false = false
-
-lemma-∨-good : ∀ {A B e} → eval e (A ∨ B) b= or (eval e A) (eval e B)
+lemma-∨-good : ∀ {A B e} → eval e (A ∨ B) b= ((eval e A) b∨ (eval e B))
 lemma-∨-good {A} {B} {e} with eval e A | eval e B
 lemma-∨-good | true | true = ET
 lemma-∨-good | true | false = ET
 lemma-∨-good | false | true = ET
 lemma-∨-good | false | false = EF
 
-lemma-∧-good : ∀ {A B e} → eval e (A ∧ B) b= and (eval e A) (eval e B)
+lemma-∧-good : ∀ {A B e} → eval e (A ∧ B) b= ((eval e A) b∧ (eval e B))
 lemma-∧-good {A} {B} {e} with eval e A | eval e B
 lemma-∧-good | true | true = ET
 lemma-∧-good | true | false = EF

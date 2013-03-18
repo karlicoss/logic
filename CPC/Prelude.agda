@@ -136,3 +136,7 @@ lemma-n+-comm {succ a} {succ b} = cong succ (lemma-succ-left {a = a} {b = b} ~ s
 lemma-n+-assoc : ∀ {a b c} → (a n+ (b n+ c)) ≡ ((a n+ b) n+ c)
 lemma-n+-assoc {zero} {b} {c} = refl
 lemma-n+-assoc {succ a} {b} {c} = cong succ (lemma-n+-assoc {a = a} {b = b} {c = c})
+
+data Fin : ℕ → Set where
+  fzero : {n : ℕ} → Fin (succ n)
+  fsucc : {n : ℕ} → Fin n → Fin (succ n)

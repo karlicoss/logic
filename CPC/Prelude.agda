@@ -92,6 +92,22 @@ true b∨ false = true
 false b∨ true = true
 false b∨ false = false
 
+lemma-b∧-ololo : ∀ {a b} → a ≡ true → b ≡ true → a b∧ b ≡ true
+lemma-b∧-ololo {true} {true} pa pb = refl
+lemma-b∧-ololo {true} {false} pa pb = pb
+lemma-b∧-ololo {false} {true} pa pb = pa
+lemma-b∧-ololo {false} {false} pa pb = pb
+
+lemma-b∧-left : ∀ {a b} → a b∧ b ≡ true → a ≡ true
+lemma-b∧-left {true} p = refl
+lemma-b∧-left {false} {true} p = p
+lemma-b∧-left {false} {false} p = p
+
+lemma-b∧-right : ∀ {a b} → a b∧ b ≡ true → b ≡ true
+lemma-b∧-right {a} {true} p = refl
+lemma-b∧-right {true} {false} p = p
+lemma-b∧-right {false} {false} p = p
+
 data ℕ : Set where
   zero : ℕ
   succ : ℕ → ℕ

@@ -1,0 +1,2503 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+><head
+  ><title
+    >SystemLol</title
+    ><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"
+     /><meta http-equiv="Content-Style-Type" content="text/css"
+     /><link href="Agda.css" rel="stylesheet" type="text/css"
+     /></head
+  ><body
+  ><pre
+    ><a name="1" class="Keyword"
+      >module</a
+      ><a name="7"
+      > </a
+      ><a name="8" href="SystemLol.html#1" class="Module"
+      >SystemLol</a
+      ><a name="17"
+      > </a
+      ><a name="18" class="Keyword"
+      >where</a
+      ><a name="23"
+      >
+
+</a
+      ><a name="25" class="Keyword"
+      >open</a
+      ><a name="29"
+      > </a
+      ><a name="30" class="Keyword"
+      >import</a
+      ><a name="36"
+      > </a
+      ><a name="37" href="Prelude.html#1" class="Module"
+      >Prelude</a
+      ><a name="44"
+      >
+
+</a
+      ><a name="46" class="Comment"
+      >-- &#9644; is \re</a
+      ><a name="57"
+      >
+</a
+      ><a name="58" class="Comment"
+      >-- &#9632; is \sq</a
+      ><a name="69"
+      >
+</a
+      ><a name="70" class="Comment"
+      >-- &#9679; is \ci</a
+      ><a name="81"
+      >
+</a
+      ><a name="82" class="Comment"
+      >-- &#8866; is \vdash</a
+      ><a name="96"
+      >
+</a
+      ><a name="97" class="Comment"
+      >-- &#8623; is \dz</a
+      ><a name="108"
+      >
+
+
+</a
+      ><a name="111" class="Comment"
+      >-- WFF (denoted by &#8623;, I picked it because it looks awesome) consist of sequences like</a
+      ><a name="196"
+      >
+</a
+      ><a name="197" class="Comment"
+      >-- &#9644;</a
+      ><a name="201"
+      >
+</a
+      ><a name="202" class="Comment"
+      >-- &#9679;&#9679;&#9632;&#9644;</a
+      ><a name="209"
+      >
+</a
+      ><a name="210" class="Comment"
+      >-- &#9679;&#9644;</a
+      ><a name="215"
+      >
+</a
+      ><a name="216" class="Comment"
+      >-- &#9679;&#9679;&#9632;&#9632;&#9679;&#9632;&#9679;&#9644;</a
+      ><a name="227"
+      >
+</a
+      ><a name="228" class="Keyword"
+      >data</a
+      ><a name="232"
+      > </a
+      ><a name="233" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="234"
+      > </a
+      ><a name="235" class="Symbol"
+      >:</a
+      ><a name="236"
+      > </a
+      ><a name="237" class="PrimitiveType"
+      >Set</a
+      ><a name="240"
+      > </a
+      ><a name="241" class="Keyword"
+      >where</a
+      ><a name="246"
+      >
+  </a
+      ><a name="249" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="250"
+      > </a
+      ><a name="251" class="Symbol"
+      >:</a
+      ><a name="252"
+      > </a
+      ><a name="253" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="254"
+      >
+  </a
+      ><a name="257" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;_</a
+      ><a name="259"
+      > </a
+      ><a name="260" class="Symbol"
+      >:</a
+      ><a name="261"
+      > </a
+      ><a name="262" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="263"
+      > </a
+      ><a name="264" class="Symbol"
+      >&#8594;</a
+      ><a name="265"
+      > </a
+      ><a name="266" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="267"
+      >
+  </a
+      ><a name="270" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;_</a
+      ><a name="272"
+      > </a
+      ><a name="273" class="Symbol"
+      >:</a
+      ><a name="274"
+      > </a
+      ><a name="275" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="276"
+      > </a
+      ><a name="277" class="Symbol"
+      >&#8594;</a
+      ><a name="278"
+      > </a
+      ><a name="279" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="280"
+      >
+
+</a
+      ><a name="282" class="Comment"
+      >-- rule A&#915; allows to deduce something assumed</a
+      ><a name="327"
+      >
+</a
+      ><a name="328" class="Comment"
+      >-- rule AX is an axiom</a
+      ><a name="350"
+      >
+</a
+      ><a name="351" class="Comment"
+      >-- rule AI is an inference rule</a
+      ><a name="382"
+      >
+</a
+      ><a name="383" class="Keyword"
+      >data</a
+      ><a name="387"
+      > </a
+      ><a name="388" href="SystemLol.html#388" class="Datatype Operator"
+      >_&#8866;_</a
+      ><a name="391"
+      > </a
+      ><a name="392" class="Symbol"
+      >(</a
+      ><a name="393" href="SystemLol.html#393" class="Bound"
+      >&#915;</a
+      ><a name="394"
+      > </a
+      ><a name="395" class="Symbol"
+      >:</a
+      ><a name="396"
+      > </a
+      ><a name="397" href="Prelude.html#403" class="Datatype"
+      >List</a
+      ><a name="401"
+      > </a
+      ><a name="402" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="403" class="Symbol"
+      >)</a
+      ><a name="404"
+      > </a
+      ><a name="405" class="Symbol"
+      >:</a
+      ><a name="406"
+      > </a
+      ><a name="407" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="408"
+      > </a
+      ><a name="409" class="Symbol"
+      >&#8594;</a
+      ><a name="410"
+      > </a
+      ><a name="411" class="PrimitiveType"
+      >Set</a
+      ><a name="414"
+      > </a
+      ><a name="415" class="Keyword"
+      >where</a
+      ><a name="420"
+      >
+  </a
+      ><a name="423" href="SystemLol.html#423" class="InductiveConstructor"
+      >A&#915;</a
+      ><a name="425"
+      > </a
+      ><a name="426" class="Symbol"
+      >:</a
+      ><a name="427"
+      > </a
+      ><a name="428" class="Symbol"
+      >&#8704;</a
+      ><a name="429"
+      > </a
+      ><a name="430" class="Symbol"
+      >{</a
+      ><a name="431" href="SystemLol.html#431" class="Bound"
+      >A</a
+      ><a name="432" class="Symbol"
+      >}</a
+      ><a name="433"
+      > </a
+      ><a name="434" class="Symbol"
+      >&#8594;</a
+      ><a name="435"
+      > </a
+      ><a name="436" href="SystemLol.html#431" class="Bound"
+      >A</a
+      ><a name="437"
+      > </a
+      ><a name="438" href="Prelude.html#767" class="Datatype Operator"
+      >&#8712;</a
+      ><a name="439"
+      > </a
+      ><a name="440" href="SystemLol.html#393" class="Bound"
+      >&#915;</a
+      ><a name="441"
+      > </a
+      ><a name="442" class="Symbol"
+      >&#8594;</a
+      ><a name="443"
+      > </a
+      ><a name="444" href="SystemLol.html#393" class="Bound"
+      >&#915;</a
+      ><a name="445"
+      > </a
+      ><a name="446" href="SystemLol.html#388" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="447"
+      > </a
+      ><a name="448" href="SystemLol.html#431" class="Bound"
+      >A</a
+      ><a name="449"
+      >
+  </a
+      ><a name="452" href="SystemLol.html#452" class="InductiveConstructor"
+      >AX</a
+      ><a name="454"
+      > </a
+      ><a name="455" class="Symbol"
+      >:</a
+      ><a name="456"
+      > </a
+      ><a name="457" href="SystemLol.html#393" class="Bound"
+      >&#915;</a
+      ><a name="458"
+      > </a
+      ><a name="459" href="SystemLol.html#388" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="460"
+      > </a
+      ><a name="461" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="462"
+      > </a
+      ><a name="463" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="464"
+      >
+  </a
+      ><a name="467" href="SystemLol.html#467" class="InductiveConstructor"
+      >AI</a
+      ><a name="469"
+      > </a
+      ><a name="470" class="Symbol"
+      >:</a
+      ><a name="471"
+      > </a
+      ><a name="472" class="Symbol"
+      >&#8704;</a
+      ><a name="473"
+      > </a
+      ><a name="474" class="Symbol"
+      >{</a
+      ><a name="475" href="SystemLol.html#475" class="Bound"
+      >A</a
+      ><a name="476" class="Symbol"
+      >}</a
+      ><a name="477"
+      > </a
+      ><a name="478" class="Symbol"
+      >&#8594;</a
+      ><a name="479"
+      > </a
+      ><a name="480" href="SystemLol.html#393" class="Bound"
+      >&#915;</a
+      ><a name="481"
+      > </a
+      ><a name="482" href="SystemLol.html#388" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="483"
+      > </a
+      ><a name="484" href="SystemLol.html#475" class="Bound"
+      >A</a
+      ><a name="485"
+      > </a
+      ><a name="486" class="Symbol"
+      >&#8594;</a
+      ><a name="487"
+      > </a
+      ><a name="488" href="SystemLol.html#393" class="Bound"
+      >&#915;</a
+      ><a name="489"
+      > </a
+      ><a name="490" href="SystemLol.html#388" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="491"
+      > </a
+      ><a name="492" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="493"
+      > </a
+      ><a name="494" href="SystemLol.html#475" class="Bound"
+      >A</a
+      ><a name="495"
+      >
+
+</a
+      ><a name="497" class="Comment"
+      >-- you might notice the sequences deducible by these rules </a
+      ><a name="556"
+      >
+</a
+      ><a name="557" class="Comment"
+      >-- end by &#9632; &#9644; and contain no other &#9632;. Let's prove it!</a
+      ><a name="610"
+      >
+
+</a
+      ><a name="612" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="621"
+      > </a
+      ><a name="622" class="Symbol"
+      >:</a
+      ><a name="623"
+      > </a
+      ><a name="624" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="625"
+      > </a
+      ><a name="626" class="Symbol"
+      >&#8594;</a
+      ><a name="627"
+      > </a
+      ><a name="628" href="Prelude.html#1563" class="Datatype"
+      >Bool</a
+      ><a name="632"
+      >
+</a
+      ><a name="633" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="642"
+      > </a
+      ><a name="643" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="644"
+      > </a
+      ><a name="645" class="Symbol"
+      >=</a
+      ><a name="646"
+      > </a
+      ><a name="647" href="Prelude.html#1587" class="InductiveConstructor"
+      >false</a
+      ><a name="652"
+      >
+</a
+      ><a name="653" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="662"
+      > </a
+      ><a name="663" class="Symbol"
+      >(</a
+      ><a name="664" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="665"
+      > </a
+      ><a name="666" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="667" class="Symbol"
+      >)</a
+      ><a name="668"
+      > </a
+      ><a name="669" class="Symbol"
+      >=</a
+      ><a name="670"
+      > </a
+      ><a name="671" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="675"
+      >
+</a
+      ><a name="676" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="685"
+      > </a
+      ><a name="686" class="Symbol"
+      >(</a
+      ><a name="687" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="688"
+      > </a
+      ><a name="689" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="690" class="Symbol"
+      >)</a
+      ><a name="691"
+      > </a
+      ><a name="692" class="Symbol"
+      >=</a
+      ><a name="693"
+      > </a
+      ><a name="694" href="Prelude.html#1587" class="InductiveConstructor"
+      >false</a
+      ><a name="699"
+      >
+</a
+      ><a name="700" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="709"
+      > </a
+      ><a name="710" class="Symbol"
+      >(</a
+      ><a name="711" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="712"
+      > </a
+      ><a name="713" href="SystemLol.html#713" class="Bound"
+      >x</a
+      ><a name="714" class="Symbol"
+      >)</a
+      ><a name="715"
+      > </a
+      ><a name="716" class="Symbol"
+      >=</a
+      ><a name="717"
+      > </a
+      ><a name="718" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="727"
+      > </a
+      ><a name="728" href="SystemLol.html#713" class="Bound"
+      >x</a
+      ><a name="729"
+      >
+</a
+      ><a name="730" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="739"
+      > </a
+      ><a name="740" class="Symbol"
+      >(</a
+      ><a name="741" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="742"
+      > </a
+      ><a name="743" href="SystemLol.html#743" class="Bound"
+      >x</a
+      ><a name="744" class="Symbol"
+      >)</a
+      ><a name="745"
+      > </a
+      ><a name="746" class="Symbol"
+      >=</a
+      ><a name="747"
+      > </a
+      ><a name="748" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="757"
+      > </a
+      ><a name="758" href="SystemLol.html#743" class="Bound"
+      >x</a
+      ><a name="759"
+      >
+
+</a
+      ><a name="761" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="764"
+      > </a
+      ><a name="765" class="Symbol"
+      >:</a
+      ><a name="766"
+      > </a
+      ><a name="767" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="768"
+      > </a
+      ><a name="769" class="Symbol"
+      >&#8594;</a
+      ><a name="770"
+      > </a
+      ><a name="771" href="Prelude.html#1563" class="Datatype"
+      >Bool</a
+      ><a name="775"
+      >
+</a
+      ><a name="776" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="779"
+      > </a
+      ><a name="780" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="781"
+      > </a
+      ><a name="782" class="Symbol"
+      >=</a
+      ><a name="783"
+      > </a
+      ><a name="784" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="788"
+      >
+</a
+      ><a name="789" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="792"
+      > </a
+      ><a name="793" class="Symbol"
+      >(</a
+      ><a name="794" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="795"
+      > </a
+      ><a name="796" href="SystemLol.html#796" class="Bound"
+      >f</a
+      ><a name="797" class="Symbol"
+      >)</a
+      ><a name="798"
+      > </a
+      ><a name="799" class="Symbol"
+      >=</a
+      ><a name="800"
+      > </a
+      ><a name="801" href="Prelude.html#1587" class="InductiveConstructor"
+      >false</a
+      ><a name="806"
+      >
+</a
+      ><a name="807" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="810"
+      > </a
+      ><a name="811" class="Symbol"
+      >(</a
+      ><a name="812" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="813"
+      > </a
+      ><a name="814" href="SystemLol.html#814" class="Bound"
+      >f</a
+      ><a name="815" class="Symbol"
+      >)</a
+      ><a name="816"
+      > </a
+      ><a name="817" class="Symbol"
+      >=</a
+      ><a name="818"
+      > </a
+      ><a name="819" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="822"
+      > </a
+      ><a name="823" href="SystemLol.html#814" class="Bound"
+      >f</a
+      ><a name="824"
+      >
+
+</a
+      ><a name="826" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="834"
+      > </a
+      ><a name="835" class="Symbol"
+      >:</a
+      ><a name="836"
+      > </a
+      ><a name="837" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="838"
+      > </a
+      ><a name="839" class="Symbol"
+      >&#8594;</a
+      ><a name="840"
+      > </a
+      ><a name="841" href="Prelude.html#1563" class="Datatype"
+      >Bool</a
+      ><a name="845"
+      >
+</a
+      ><a name="846" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="854"
+      > </a
+      ><a name="855" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="856"
+      > </a
+      ><a name="857" class="Symbol"
+      >=</a
+      ><a name="858"
+      > </a
+      ><a name="859" href="Prelude.html#1587" class="InductiveConstructor"
+      >false</a
+      ><a name="864"
+      >
+</a
+      ><a name="865" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="873"
+      > </a
+      ><a name="874" class="Symbol"
+      >(</a
+      ><a name="875" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="876"
+      > </a
+      ><a name="877" href="SystemLol.html#877" class="Bound"
+      >f</a
+      ><a name="878" class="Symbol"
+      >)</a
+      ><a name="879"
+      > </a
+      ><a name="880" class="Symbol"
+      >=</a
+      ><a name="881"
+      > </a
+      ><a name="882" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="885"
+      > </a
+      ><a name="886" href="SystemLol.html#877" class="Bound"
+      >f</a
+      ><a name="887"
+      >
+</a
+      ><a name="888" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="896"
+      > </a
+      ><a name="897" class="Symbol"
+      >(</a
+      ><a name="898" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="899"
+      > </a
+      ><a name="900" href="SystemLol.html#900" class="Bound"
+      >f</a
+      ><a name="901" class="Symbol"
+      >)</a
+      ><a name="902"
+      > </a
+      ><a name="903" class="Symbol"
+      >=</a
+      ><a name="904"
+      > </a
+      ><a name="905" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="913"
+      > </a
+      ><a name="914" href="SystemLol.html#900" class="Bound"
+      >f</a
+      ><a name="915"
+      >
+
+</a
+      ><a name="917" class="Comment"
+      >-- we want to prove consistency, that is, anything deducible from &#8866; is</a
+      ><a name="987"
+      >
+</a
+      ><a name="988" class="Comment"
+      >-- a 'good sequence', that is, contains exactly one &#9632; which is at the</a
+      ><a name="1057"
+      >
+</a
+      ><a name="1058" class="Comment"
+      >-- end of the formula</a
+      ><a name="1079"
+      >
+</a
+      ><a name="1080" href="SystemLol.html#1080" class="Function"
+      >goodseq</a
+      ><a name="1087"
+      > </a
+      ><a name="1088" class="Symbol"
+      >:</a
+      ><a name="1089"
+      > </a
+      ><a name="1090" href="SystemLol.html#233" class="Datatype"
+      >&#8623;</a
+      ><a name="1091"
+      > </a
+      ><a name="1092" class="Symbol"
+      >&#8594;</a
+      ><a name="1093"
+      > </a
+      ><a name="1094" href="Prelude.html#1563" class="Datatype"
+      >Bool</a
+      ><a name="1098"
+      >
+</a
+      ><a name="1099" href="SystemLol.html#1080" class="Function"
+      >goodseq</a
+      ><a name="1106"
+      > </a
+      ><a name="1107" href="SystemLol.html#1107" class="Bound"
+      >f</a
+      ><a name="1108"
+      > </a
+      ><a name="1109" class="Symbol"
+      >=</a
+      ><a name="1110"
+      > </a
+      ><a name="1111" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="1120"
+      > </a
+      ><a name="1121" href="SystemLol.html#1107" class="Bound"
+      >f</a
+      ><a name="1122"
+      > </a
+      ><a name="1123" href="Prelude.html#1840" class="Function Operator"
+      >b&#8743;</a
+      ><a name="1125"
+      > </a
+      ><a name="1126" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="1134"
+      > </a
+      ><a name="1135" href="SystemLol.html#1107" class="Bound"
+      >f</a
+      ><a name="1136"
+      >
+
+</a
+      ><a name="1138" class="Comment"
+      >-- some useful lemmas</a
+      ><a name="1159"
+      >
+
+</a
+      ><a name="1161" class="Comment"
+      >-- if a formula contains only one &#9632;, it won't hurt if we prepend a &#9679;</a
+      ><a name="1229"
+      >
+</a
+      ><a name="1230" href="SystemLol.html#1230" class="Function"
+      >lemma-&#9679;&#8321;</a
+      ><a name="1238"
+      > </a
+      ><a name="1239" class="Symbol"
+      >:</a
+      ><a name="1240"
+      > </a
+      ><a name="1241" class="Symbol"
+      >&#8704;</a
+      ><a name="1242"
+      > </a
+      ><a name="1243" class="Symbol"
+      >{</a
+      ><a name="1244" href="SystemLol.html#1244" class="Bound"
+      >A</a
+      ><a name="1245" class="Symbol"
+      >}</a
+      ><a name="1246"
+      > </a
+      ><a name="1247" class="Symbol"
+      >&#8594;</a
+      ><a name="1248"
+      > </a
+      ><a name="1249" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="1257"
+      > </a
+      ><a name="1258" href="SystemLol.html#1244" class="Bound"
+      >A</a
+      ><a name="1259"
+      > </a
+      ><a name="1260" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1261"
+      > </a
+      ><a name="1262" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1266"
+      > </a
+      ><a name="1267" class="Symbol"
+      >&#8594;</a
+      ><a name="1268"
+      > </a
+      ><a name="1269" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="1277"
+      > </a
+      ><a name="1278" class="Symbol"
+      >(</a
+      ><a name="1279" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="1280"
+      > </a
+      ><a name="1281" href="SystemLol.html#1244" class="Bound"
+      >A</a
+      ><a name="1282" class="Symbol"
+      >)</a
+      ><a name="1283"
+      > </a
+      ><a name="1284" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1285"
+      > </a
+      ><a name="1286" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1290"
+      >
+</a
+      ><a name="1291" href="SystemLol.html#1230" class="Function"
+      >lemma-&#9679;&#8321;</a
+      ><a name="1299"
+      > </a
+      ><a name="1300" class="Symbol"
+      >{</a
+      ><a name="1301" href="SystemLol.html#1301" class="Bound"
+      >A</a
+      ><a name="1302" class="Symbol"
+      >}</a
+      ><a name="1303"
+      > </a
+      ><a name="1304" href="SystemLol.html#1304" class="Bound"
+      >p</a
+      ><a name="1305"
+      > </a
+      ><a name="1306" class="Keyword"
+      >with</a
+      ><a name="1310"
+      > </a
+      ><a name="1311" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="1319"
+      > </a
+      ><a name="1320" href="SystemLol.html#1301" class="Bound"
+      >A</a
+      ><a name="1321"
+      >
+</a
+      ><a name="1322" href="SystemLol.html#1230" class="Function"
+      >lemma-&#9679;&#8321;</a
+      ><a name="1330"
+      > </a
+      ><a name="1331" href="SystemLol.html#1331" class="Bound"
+      >p</a
+      ><a name="1332"
+      > </a
+      ><a name="1333" class="Symbol"
+      >|</a
+      ><a name="1334"
+      > </a
+      ><a name="1335" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1339"
+      > </a
+      ><a name="1340" class="Symbol"
+      >=</a
+      ><a name="1341"
+      > </a
+      ><a name="1342" href="Prelude.html#81" class="InductiveConstructor"
+      >refl</a
+      ><a name="1346"
+      >
+</a
+      ><a name="1347" href="SystemLol.html#1230" class="Function"
+      >lemma-&#9679;&#8321;</a
+      ><a name="1355"
+      > </a
+      ><a name="1356" class="Symbol"
+      >()</a
+      ><a name="1358"
+      > </a
+      ><a name="1359" class="Symbol"
+      >|</a
+      ><a name="1360"
+      > </a
+      ><a name="1361" href="Prelude.html#1587" class="InductiveConstructor"
+      >false</a
+      ><a name="1366"
+      >
+
+</a
+      ><a name="1368" class="Comment"
+      >-- similarly, if a formula contains only one &#9632;, it won't hurt to</a
+      ><a name="1432"
+      >
+</a
+      ><a name="1433" class="Comment"
+      >-- prepend a &#9679; </a
+      ><a name="1448"
+      >
+</a
+      ><a name="1449" href="SystemLol.html#1449" class="Function"
+      >lemma-&#9679;&#8322;</a
+      ><a name="1457"
+      > </a
+      ><a name="1458" class="Symbol"
+      >:</a
+      ><a name="1459"
+      > </a
+      ><a name="1460" class="Symbol"
+      >&#8704;</a
+      ><a name="1461"
+      > </a
+      ><a name="1462" class="Symbol"
+      >{</a
+      ><a name="1463" href="SystemLol.html#1463" class="Bound"
+      >A</a
+      ><a name="1464" class="Symbol"
+      >}</a
+      ><a name="1465"
+      > </a
+      ><a name="1466" class="Symbol"
+      >&#8594;</a
+      ><a name="1467"
+      > </a
+      ><a name="1468" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="1477"
+      > </a
+      ><a name="1478" href="SystemLol.html#1463" class="Bound"
+      >A</a
+      ><a name="1479"
+      > </a
+      ><a name="1480" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1481"
+      > </a
+      ><a name="1482" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1486"
+      > </a
+      ><a name="1487" class="Symbol"
+      >&#8594;</a
+      ><a name="1488"
+      > </a
+      ><a name="1489" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="1498"
+      > </a
+      ><a name="1499" class="Symbol"
+      >(</a
+      ><a name="1500" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="1501"
+      > </a
+      ><a name="1502" href="SystemLol.html#1463" class="Bound"
+      >A</a
+      ><a name="1503" class="Symbol"
+      >)</a
+      ><a name="1504"
+      > </a
+      ><a name="1505" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1506"
+      > </a
+      ><a name="1507" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1511"
+      >
+</a
+      ><a name="1512" href="SystemLol.html#1449" class="Function"
+      >lemma-&#9679;&#8322;</a
+      ><a name="1520"
+      > </a
+      ><a name="1521" class="Symbol"
+      >{</a
+      ><a name="1522" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="1523" class="Symbol"
+      >}</a
+      ><a name="1524"
+      > </a
+      ><a name="1525" class="Symbol"
+      >()</a
+      ><a name="1527"
+      >
+</a
+      ><a name="1528" href="SystemLol.html#1449" class="Function"
+      >lemma-&#9679;&#8322;</a
+      ><a name="1536"
+      > </a
+      ><a name="1537" class="Symbol"
+      >{</a
+      ><a name="1538" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="1539"
+      > </a
+      ><a name="1540" href="SystemLol.html#1540" class="Bound"
+      >A</a
+      ><a name="1541" class="Symbol"
+      >}</a
+      ><a name="1542"
+      > </a
+      ><a name="1543" href="SystemLol.html#1543" class="Bound"
+      >p</a
+      ><a name="1544"
+      > </a
+      ><a name="1545" class="Symbol"
+      >=</a
+      ><a name="1546"
+      > </a
+      ><a name="1547" href="SystemLol.html#1543" class="Bound"
+      >p</a
+      ><a name="1548"
+      >
+</a
+      ><a name="1549" href="SystemLol.html#1449" class="Function"
+      >lemma-&#9679;&#8322;</a
+      ><a name="1557"
+      > </a
+      ><a name="1558" class="Symbol"
+      >{</a
+      ><a name="1559" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="1560"
+      > </a
+      ><a name="1561" href="SystemLol.html#1561" class="Bound"
+      >A</a
+      ><a name="1562" class="Symbol"
+      >}</a
+      ><a name="1563"
+      > </a
+      ><a name="1564" href="SystemLol.html#1564" class="Bound"
+      >p</a
+      ><a name="1565"
+      > </a
+      ><a name="1566" class="Symbol"
+      >=</a
+      ><a name="1567"
+      > </a
+      ><a name="1568" href="SystemLol.html#1564" class="Bound"
+      >p</a
+      ><a name="1569"
+      >
+
+</a
+      ><a name="1571" class="Comment"
+      >-- the &#9632; is somewhere in the tail</a
+      ><a name="1604"
+      >
+</a
+      ><a name="1605" href="SystemLol.html#1605" class="Function"
+      >lemma-&#9679;&#8323;</a
+      ><a name="1613"
+      > </a
+      ><a name="1614" class="Symbol"
+      >:</a
+      ><a name="1615"
+      > </a
+      ><a name="1616" class="Symbol"
+      >&#8704;</a
+      ><a name="1617"
+      > </a
+      ><a name="1618" class="Symbol"
+      >{</a
+      ><a name="1619" href="SystemLol.html#1619" class="Bound"
+      >A</a
+      ><a name="1620" class="Symbol"
+      >}</a
+      ><a name="1621"
+      > </a
+      ><a name="1622" class="Symbol"
+      >&#8594;</a
+      ><a name="1623"
+      > </a
+      ><a name="1624" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="1633"
+      > </a
+      ><a name="1634" class="Symbol"
+      >(</a
+      ><a name="1635" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="1636"
+      > </a
+      ><a name="1637" href="SystemLol.html#1619" class="Bound"
+      >A</a
+      ><a name="1638" class="Symbol"
+      >)</a
+      ><a name="1639"
+      > </a
+      ><a name="1640" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1641"
+      > </a
+      ><a name="1642" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1646"
+      > </a
+      ><a name="1647" class="Symbol"
+      >&#8594;</a
+      ><a name="1648"
+      > </a
+      ><a name="1649" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="1658"
+      > </a
+      ><a name="1659" href="SystemLol.html#1619" class="Bound"
+      >A</a
+      ><a name="1660"
+      > </a
+      ><a name="1661" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1662"
+      > </a
+      ><a name="1663" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1667"
+      >
+</a
+      ><a name="1668" href="SystemLol.html#1605" class="Function"
+      >lemma-&#9679;&#8323;</a
+      ><a name="1676"
+      > </a
+      ><a name="1677" class="Symbol"
+      >{</a
+      ><a name="1678" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="1679" class="Symbol"
+      >}</a
+      ><a name="1680"
+      > </a
+      ><a name="1681" class="Symbol"
+      >()</a
+      ><a name="1683"
+      >
+</a
+      ><a name="1684" href="SystemLol.html#1605" class="Function"
+      >lemma-&#9679;&#8323;</a
+      ><a name="1692"
+      > </a
+      ><a name="1693" class="Symbol"
+      >{</a
+      ><a name="1694" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="1695"
+      > </a
+      ><a name="1696" href="SystemLol.html#1696" class="Bound"
+      >A</a
+      ><a name="1697" class="Symbol"
+      >}</a
+      ><a name="1698"
+      > </a
+      ><a name="1699" href="SystemLol.html#1699" class="Bound"
+      >p</a
+      ><a name="1700"
+      > </a
+      ><a name="1701" class="Symbol"
+      >=</a
+      ><a name="1702"
+      > </a
+      ><a name="1703" href="SystemLol.html#1699" class="Bound"
+      >p</a
+      ><a name="1704"
+      >
+</a
+      ><a name="1705" href="SystemLol.html#1605" class="Function"
+      >lemma-&#9679;&#8323;</a
+      ><a name="1713"
+      > </a
+      ><a name="1714" class="Symbol"
+      >{</a
+      ><a name="1715" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="1716"
+      > </a
+      ><a name="1717" href="SystemLol.html#1717" class="Bound"
+      >A</a
+      ><a name="1718" class="Symbol"
+      >}</a
+      ><a name="1719"
+      > </a
+      ><a name="1720" href="SystemLol.html#1720" class="Bound"
+      >p</a
+      ><a name="1721"
+      > </a
+      ><a name="1722" class="Symbol"
+      >=</a
+      ><a name="1723"
+      > </a
+      ><a name="1724" href="SystemLol.html#1720" class="Bound"
+      >p</a
+      ><a name="1725"
+      >
+
+</a
+      ><a name="1727" href="SystemLol.html#1727" class="Function"
+      >theorem-&#8623;-consistency</a
+      ><a name="1748"
+      > </a
+      ><a name="1749" class="Symbol"
+      >:</a
+      ><a name="1750"
+      > </a
+      ><a name="1751" class="Symbol"
+      >&#8704;</a
+      ><a name="1752"
+      > </a
+      ><a name="1753" class="Symbol"
+      >{</a
+      ><a name="1754" href="SystemLol.html#1754" class="Bound"
+      >A</a
+      ><a name="1755" class="Symbol"
+      >}</a
+      ><a name="1756"
+      > </a
+      ><a name="1757" class="Symbol"
+      >&#8594;</a
+      ><a name="1758"
+      > </a
+      ><a name="1759" href="Prelude.html#432" class="InductiveConstructor"
+      >[]</a
+      ><a name="1761"
+      > </a
+      ><a name="1762" href="SystemLol.html#388" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="1763"
+      > </a
+      ><a name="1764" href="SystemLol.html#1754" class="Bound"
+      >A</a
+      ><a name="1765"
+      > </a
+      ><a name="1766" class="Symbol"
+      >&#8594;</a
+      ><a name="1767"
+      > </a
+      ><a name="1768" href="SystemLol.html#1080" class="Function"
+      >goodseq</a
+      ><a name="1775"
+      > </a
+      ><a name="1776" href="SystemLol.html#1754" class="Bound"
+      >A</a
+      ><a name="1777"
+      > </a
+      ><a name="1778" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="1779"
+      > </a
+      ><a name="1780" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="1784"
+      >
+</a
+      ><a name="1785" href="SystemLol.html#1727" class="Function"
+      >theorem-&#8623;-consistency</a
+      ><a name="1806"
+      > </a
+      ><a name="1807" class="Symbol"
+      >(</a
+      ><a name="1808" href="SystemLol.html#423" class="InductiveConstructor"
+      >A&#915;</a
+      ><a name="1810"
+      > </a
+      ><a name="1811" class="Symbol"
+      >())</a
+      ><a name="1814"
+      >
+</a
+      ><a name="1815" href="SystemLol.html#1727" class="Function"
+      >theorem-&#8623;-consistency</a
+      ><a name="1836"
+      > </a
+      ><a name="1837" href="SystemLol.html#452" class="InductiveConstructor"
+      >AX</a
+      ><a name="1839"
+      > </a
+      ><a name="1840" class="Symbol"
+      >=</a
+      ><a name="1841"
+      > </a
+      ><a name="1842" href="Prelude.html#81" class="InductiveConstructor"
+      >refl</a
+      ><a name="1846"
+      >
+</a
+      ><a name="1847" href="SystemLol.html#1727" class="Function"
+      >theorem-&#8623;-consistency</a
+      ><a name="1868"
+      > </a
+      ><a name="1869" class="Symbol"
+      >{</a
+      ><a name="1870" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="1871"
+      > </a
+      ><a name="1872" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="1873" class="Symbol"
+      >}</a
+      ><a name="1874"
+      > </a
+      ><a name="1875" class="Symbol"
+      >(</a
+      ><a name="1876" href="SystemLol.html#467" class="InductiveConstructor"
+      >AI</a
+      ><a name="1878"
+      > </a
+      ><a name="1879" class="Symbol"
+      >{</a
+      ><a name="1880" class="DottedPattern Symbol"
+      >.</a
+      ><a name="1881" href="SystemLol.html#1872" class="DottedPattern Bound"
+      >A</a
+      ><a name="1882" class="Symbol"
+      >}</a
+      ><a name="1883"
+      > </a
+      ><a name="1884" href="SystemLol.html#1884" class="Bound"
+      >p</a
+      ><a name="1885" class="Symbol"
+      >)</a
+      ><a name="1886"
+      > </a
+      ><a name="1887" class="Keyword"
+      >with</a
+      ><a name="1891"
+      > </a
+      ><a name="1892" href="SystemLol.html#1727" class="Function"
+      >theorem-&#8623;-consistency</a
+      ><a name="1913"
+      > </a
+      ><a name="1914" href="SystemLol.html#1884" class="Bound"
+      >p</a
+      ><a name="1915"
+      >
+</a
+      ><a name="1916" class="Symbol"
+      >...</a
+      ><a name="1919"
+      > </a
+      ><a name="1920" class="Symbol"
+      >|</a
+      ><a name="1921"
+      > </a
+      ><a name="1922" href="SystemLol.html#1922" class="Bound"
+      >xx</a
+      ><a name="1924"
+      > </a
+      ><a name="1925" class="Keyword"
+      >with</a
+      ><a name="1929"
+      > </a
+      ><a name="1930" href="Prelude.html#2296" class="Function"
+      >lemma-b&#8743;-left</a
+      ><a name="1943"
+      > </a
+      ><a name="1944" class="Symbol"
+      >{</a
+      ><a name="1945"
+      >a </a
+      ><a name="1947" class="Symbol"
+      >=</a
+      ><a name="1948"
+      > </a
+      ><a name="1949" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="1958"
+      > </a
+      ><a name="1959" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="1960" class="Symbol"
+      >}</a
+      ><a name="1961"
+      > </a
+      ><a name="1962" class="Symbol"
+      >{</a
+      ><a name="1963"
+      >b </a
+      ><a name="1965" class="Symbol"
+      >=</a
+      ><a name="1966"
+      > </a
+      ><a name="1967" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="1975"
+      > </a
+      ><a name="1976" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="1977" class="Symbol"
+      >}</a
+      ><a name="1978"
+      > </a
+      ><a name="1979" href="SystemLol.html#1922" class="Bound"
+      >xx</a
+      ><a name="1981"
+      > </a
+      ><a name="1982" class="Symbol"
+      >|</a
+      ><a name="1983"
+      > </a
+      ><a name="1984" href="Prelude.html#2449" class="Function"
+      >lemma-b&#8743;-right</a
+      ><a name="1998"
+      > </a
+      ><a name="1999" class="Symbol"
+      >{</a
+      ><a name="2000"
+      >a </a
+      ><a name="2002" class="Symbol"
+      >=</a
+      ><a name="2003"
+      > </a
+      ><a name="2004" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="2013"
+      > </a
+      ><a name="2014" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="2015" class="Symbol"
+      >}</a
+      ><a name="2016"
+      > </a
+      ><a name="2017" class="Symbol"
+      >{</a
+      ><a name="2018"
+      >b </a
+      ><a name="2020" class="Symbol"
+      >=</a
+      ><a name="2021"
+      > </a
+      ><a name="2022" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="2030"
+      > </a
+      ><a name="2031" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="2032" class="Symbol"
+      >}</a
+      ><a name="2033"
+      > </a
+      ><a name="2034" href="SystemLol.html#1922" class="Bound"
+      >xx</a
+      ><a name="2036"
+      >
+</a
+      ><a name="2037" class="Symbol"
+      >...</a
+      ><a name="2040"
+      > </a
+      ><a name="2041" class="Symbol"
+      >|</a
+      ><a name="2042"
+      > </a
+      ><a name="2043" href="SystemLol.html#2043" class="Bound"
+      >yy</a
+      ><a name="2045"
+      > </a
+      ><a name="2046" class="Symbol"
+      >|</a
+      ><a name="2047"
+      > </a
+      ><a name="2048" href="SystemLol.html#2048" class="Bound"
+      >zz</a
+      ><a name="2050"
+      > </a
+      ><a name="2051" class="Symbol"
+      >=</a
+      ><a name="2052"
+      > </a
+      ><a name="2053" href="Prelude.html#2066" class="Function"
+      >lemma-b&#8743;-ololo</a
+      ><a name="2067"
+      > </a
+      ><a name="2068" class="Symbol"
+      >{</a
+      ><a name="2069"
+      >a </a
+      ><a name="2071" class="Symbol"
+      >=</a
+      ><a name="2072"
+      > </a
+      ><a name="2073" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="2082"
+      > </a
+      ><a name="2083" class="Symbol"
+      >(</a
+      ><a name="2084" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2085"
+      > </a
+      ><a name="2086" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="2087" class="Symbol"
+      >)}</a
+      ><a name="2089"
+      > </a
+      ><a name="2090" class="Symbol"
+      >{</a
+      ><a name="2091"
+      >b </a
+      ><a name="2093" class="Symbol"
+      >=</a
+      ><a name="2094"
+      > </a
+      ><a name="2095" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="2103"
+      > </a
+      ><a name="2104" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="2105" class="Symbol"
+      >}</a
+      ><a name="2106"
+      > </a
+      ><a name="2107" class="Symbol"
+      >(</a
+      ><a name="2108" href="SystemLol.html#1449" class="Function"
+      >lemma-&#9679;&#8322;</a
+      ><a name="2116"
+      > </a
+      ><a name="2117" class="Symbol"
+      >{</a
+      ><a name="2118"
+      >A </a
+      ><a name="2120" class="Symbol"
+      >=</a
+      ><a name="2121"
+      > </a
+      ><a name="2122" href="SystemLol.html#1872" class="Bound"
+      >A</a
+      ><a name="2123" class="Symbol"
+      >}</a
+      ><a name="2124"
+      > </a
+      ><a name="2125" href="SystemLol.html#2043" class="Bound"
+      >yy</a
+      ><a name="2127" class="Symbol"
+      >)</a
+      ><a name="2128"
+      > </a
+      ><a name="2129" href="SystemLol.html#2048" class="Bound"
+      >zz</a
+      ><a name="2131"
+      >
+
+</a
+      ><a name="2133" class="Comment"
+      >-- now we shall prove the other direction: every formula containing</a
+      ><a name="2200"
+      >
+</a
+      ><a name="2201" class="Comment"
+      >-- exactly one &#9632; at the end is deducible</a
+      ><a name="2241"
+      >
+
+</a
+      ><a name="2243" class="Comment"
+      >-- formula ending with &#9632; has to contain at least one square!</a
+      ><a name="2303"
+      >
+</a
+      ><a name="2304" href="SystemLol.html#2304" class="Function"
+      >lemma-&#9632;</a
+      ><a name="2311"
+      > </a
+      ><a name="2312" class="Symbol"
+      >:</a
+      ><a name="2313"
+      > </a
+      ><a name="2314" class="Symbol"
+      >&#8704;</a
+      ><a name="2315"
+      > </a
+      ><a name="2316" class="Symbol"
+      >{</a
+      ><a name="2317" href="SystemLol.html#2317" class="Bound"
+      >A</a
+      ><a name="2318" class="Symbol"
+      >}</a
+      ><a name="2319"
+      > </a
+      ><a name="2320" class="Symbol"
+      >&#8594;</a
+      ><a name="2321"
+      > </a
+      ><a name="2322" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="2331"
+      > </a
+      ><a name="2332" href="SystemLol.html#2317" class="Bound"
+      >A</a
+      ><a name="2333"
+      > </a
+      ><a name="2334" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2335"
+      > </a
+      ><a name="2336" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="2340"
+      > </a
+      ><a name="2341" class="Symbol"
+      >&#8594;</a
+      ><a name="2342"
+      > </a
+      ><a name="2343" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="2346"
+      > </a
+      ><a name="2347" href="SystemLol.html#2317" class="Bound"
+      >A</a
+      ><a name="2348"
+      > </a
+      ><a name="2349" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2350"
+      > </a
+      ><a name="2351" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="2355"
+      > </a
+      ><a name="2356" class="Symbol"
+      >&#8594;</a
+      ><a name="2357"
+      > </a
+      ><a name="2358" href="Prelude.html#1499" class="Datatype"
+      >&#8869;</a
+      ><a name="2359"
+      >
+</a
+      ><a name="2360" href="SystemLol.html#2304" class="Function"
+      >lemma-&#9632;</a
+      ><a name="2367"
+      > </a
+      ><a name="2368" class="Symbol"
+      >{</a
+      ><a name="2369" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="2370" class="Symbol"
+      >}</a
+      ><a name="2371"
+      > </a
+      ><a name="2372" class="Symbol"
+      >()</a
+      ><a name="2374"
+      > </a
+      ><a name="2375" href="SystemLol.html#2375" class="Bound"
+      >n</a
+      ><a name="2376"
+      >
+</a
+      ><a name="2377" href="SystemLol.html#2304" class="Function"
+      >lemma-&#9632;</a
+      ><a name="2384"
+      > </a
+      ><a name="2385" class="Symbol"
+      >{</a
+      ><a name="2386" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2387"
+      > </a
+      ><a name="2388" href="SystemLol.html#2388" class="Bound"
+      >A</a
+      ><a name="2389" class="Symbol"
+      >}</a
+      ><a name="2390"
+      > </a
+      ><a name="2391" href="SystemLol.html#2391" class="Bound"
+      >e</a
+      ><a name="2392"
+      > </a
+      ><a name="2393" class="Symbol"
+      >()</a
+      ><a name="2395"
+      >
+</a
+      ><a name="2396" href="SystemLol.html#2304" class="Function"
+      >lemma-&#9632;</a
+      ><a name="2403"
+      > </a
+      ><a name="2404" class="Symbol"
+      >{</a
+      ><a name="2405" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2406"
+      > </a
+      ><a name="2407" href="SystemLol.html#2407" class="Bound"
+      >A</a
+      ><a name="2408" class="Symbol"
+      >}</a
+      ><a name="2409"
+      > </a
+      ><a name="2410" href="SystemLol.html#2410" class="Bound"
+      >e</a
+      ><a name="2411"
+      > </a
+      ><a name="2412" href="SystemLol.html#2412" class="Bound"
+      >n</a
+      ><a name="2413"
+      > </a
+      ><a name="2414" class="Symbol"
+      >=</a
+      ><a name="2415"
+      > </a
+      ><a name="2416" href="SystemLol.html#2304" class="Function"
+      >lemma-&#9632;</a
+      ><a name="2423"
+      > </a
+      ><a name="2424" class="Symbol"
+      >{</a
+      ><a name="2425" href="SystemLol.html#2407" class="Bound"
+      >A</a
+      ><a name="2426" class="Symbol"
+      >}</a
+      ><a name="2427"
+      > </a
+      ><a name="2428" class="Symbol"
+      >(</a
+      ><a name="2429" href="SystemLol.html#1605" class="Function"
+      >lemma-&#9679;&#8323;</a
+      ><a name="2437"
+      > </a
+      ><a name="2438" class="Symbol"
+      >{</a
+      ><a name="2439"
+      >A </a
+      ><a name="2441" class="Symbol"
+      >=</a
+      ><a name="2442"
+      > </a
+      ><a name="2443" href="SystemLol.html#2407" class="Bound"
+      >A</a
+      ><a name="2444" class="Symbol"
+      >}</a
+      ><a name="2445"
+      > </a
+      ><a name="2446" href="SystemLol.html#2410" class="Bound"
+      >e</a
+      ><a name="2447" class="Symbol"
+      >)</a
+      ><a name="2448"
+      > </a
+      ><a name="2449" href="SystemLol.html#2412" class="Bound"
+      >n</a
+      ><a name="2450"
+      >
+
+</a
+      ><a name="2452" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2474"
+      > </a
+      ><a name="2475" class="Symbol"
+      >:</a
+      ><a name="2476"
+      > </a
+      ><a name="2477" class="Symbol"
+      >&#8704;</a
+      ><a name="2478"
+      > </a
+      ><a name="2479" class="Symbol"
+      >{</a
+      ><a name="2480" href="SystemLol.html#2480" class="Bound"
+      >A</a
+      ><a name="2481" class="Symbol"
+      >}</a
+      ><a name="2482"
+      > </a
+      ><a name="2483" class="Symbol"
+      >&#8594;</a
+      ><a name="2484"
+      > </a
+      ><a name="2485" href="SystemLol.html#1080" class="Function"
+      >goodseq</a
+      ><a name="2492"
+      > </a
+      ><a name="2493" href="SystemLol.html#2480" class="Bound"
+      >A</a
+      ><a name="2494"
+      > </a
+      ><a name="2495" href="Prelude.html#41" class="Datatype Operator"
+      >&#8801;</a
+      ><a name="2496"
+      > </a
+      ><a name="2497" href="Prelude.html#1582" class="InductiveConstructor"
+      >true</a
+      ><a name="2501"
+      > </a
+      ><a name="2502" class="Symbol"
+      >&#8594;</a
+      ><a name="2503"
+      > </a
+      ><a name="2504" href="Prelude.html#432" class="InductiveConstructor"
+      >[]</a
+      ><a name="2506"
+      > </a
+      ><a name="2507" href="SystemLol.html#388" class="Datatype Operator"
+      >&#8866;</a
+      ><a name="2508"
+      > </a
+      ><a name="2509" href="SystemLol.html#2480" class="Bound"
+      >A</a
+      ><a name="2510"
+      >
+</a
+      ><a name="2511" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2533"
+      > </a
+      ><a name="2534" class="Symbol"
+      >{</a
+      ><a name="2535" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="2536" class="Symbol"
+      >}</a
+      ><a name="2537"
+      > </a
+      ><a name="2538" class="Symbol"
+      >()</a
+      ><a name="2540"
+      >
+</a
+      ><a name="2541" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2563"
+      > </a
+      ><a name="2564" class="Symbol"
+      >{</a
+      ><a name="2565" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2566"
+      > </a
+      ><a name="2567" href="SystemLol.html#249" class="InductiveConstructor"
+      >&#9644;</a
+      ><a name="2568" class="Symbol"
+      >}</a
+      ><a name="2569"
+      > </a
+      ><a name="2570" href="SystemLol.html#2570" class="Bound"
+      >p</a
+      ><a name="2571"
+      > </a
+      ><a name="2572" class="Symbol"
+      >=</a
+      ><a name="2573"
+      > </a
+      ><a name="2574" href="SystemLol.html#452" class="InductiveConstructor"
+      >AX</a
+      ><a name="2576"
+      >
+</a
+      ><a name="2577" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2599"
+      > </a
+      ><a name="2600" class="Symbol"
+      >{</a
+      ><a name="2601" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2602"
+      > </a
+      ><a name="2603" class="Symbol"
+      >(</a
+      ><a name="2604" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2605"
+      > </a
+      ><a name="2606" href="SystemLol.html#2606" class="Bound"
+      >A</a
+      ><a name="2607" class="Symbol"
+      >)}</a
+      ><a name="2609"
+      > </a
+      ><a name="2610" href="SystemLol.html#2610" class="Bound"
+      >p</a
+      ><a name="2611"
+      > </a
+      ><a name="2612" class="Keyword"
+      >with</a
+      ><a name="2616"
+      > </a
+      ><a name="2617" href="Prelude.html#2449" class="Function"
+      >lemma-b&#8743;-right</a
+      ><a name="2631"
+      > </a
+      ><a name="2632" class="Symbol"
+      >{</a
+      ><a name="2633"
+      >a </a
+      ><a name="2635" class="Symbol"
+      >=</a
+      ><a name="2636"
+      > </a
+      ><a name="2637" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="2646"
+      > </a
+      ><a name="2647" class="Symbol"
+      >(</a
+      ><a name="2648" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2649"
+      > </a
+      ><a name="2650" href="SystemLol.html#2606" class="Bound"
+      >A</a
+      ><a name="2651" class="Symbol"
+      >)}</a
+      ><a name="2653"
+      > </a
+      ><a name="2654" class="Symbol"
+      >{</a
+      ><a name="2655"
+      >b </a
+      ><a name="2657" class="Symbol"
+      >=</a
+      ><a name="2658"
+      > </a
+      ><a name="2659" href="Prelude.html#1587" class="InductiveConstructor"
+      >false</a
+      ><a name="2664" class="Symbol"
+      >}</a
+      ><a name="2665"
+      >  </a
+      ><a name="2667" href="SystemLol.html#2610" class="Bound"
+      >p</a
+      ><a name="2668"
+      >
+</a
+      ><a name="2669" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2691"
+      > </a
+      ><a name="2692" class="Symbol"
+      >{</a
+      ><a name="2693" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2694"
+      > </a
+      ><a name="2695" class="Symbol"
+      >(</a
+      ><a name="2696" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2697"
+      > </a
+      ><a name="2698" href="SystemLol.html#2698" class="Bound"
+      >A</a
+      ><a name="2699" class="Symbol"
+      >)}</a
+      ><a name="2701"
+      > </a
+      ><a name="2702" href="SystemLol.html#2702" class="Bound"
+      >p</a
+      ><a name="2703"
+      > </a
+      ><a name="2704" class="Symbol"
+      >|</a
+      ><a name="2705"
+      > </a
+      ><a name="2706" class="Symbol"
+      >()</a
+      ><a name="2708"
+      >
+</a
+      ><a name="2709" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2731"
+      > </a
+      ><a name="2732" class="Symbol"
+      >{</a
+      ><a name="2733" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2734"
+      > </a
+      ><a name="2735" class="Symbol"
+      >(</a
+      ><a name="2736" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2737"
+      > </a
+      ><a name="2738" href="SystemLol.html#2738" class="Bound"
+      >A</a
+      ><a name="2739" class="Symbol"
+      >)}</a
+      ><a name="2741"
+      > </a
+      ><a name="2742" href="SystemLol.html#2742" class="Bound"
+      >p</a
+      ><a name="2743"
+      > </a
+      ><a name="2744" class="Keyword"
+      >with</a
+      ><a name="2748"
+      > </a
+      ><a name="2749" href="Prelude.html#2296" class="Function"
+      >lemma-b&#8743;-left</a
+      ><a name="2762"
+      > </a
+      ><a name="2763" class="Symbol"
+      >{</a
+      ><a name="2764"
+      >a </a
+      ><a name="2766" class="Symbol"
+      >=</a
+      ><a name="2767"
+      > </a
+      ><a name="2768" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="2777"
+      > </a
+      ><a name="2778" class="Symbol"
+      >(</a
+      ><a name="2779" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2780"
+      > </a
+      ><a name="2781" href="SystemLol.html#2738" class="Bound"
+      >A</a
+      ><a name="2782" class="Symbol"
+      >)}</a
+      ><a name="2784"
+      > </a
+      ><a name="2785" class="Symbol"
+      >{</a
+      ><a name="2786"
+      >b </a
+      ><a name="2788" class="Symbol"
+      >=</a
+      ><a name="2789"
+      > </a
+      ><a name="2790" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="2793"
+      > </a
+      ><a name="2794" href="SystemLol.html#2738" class="Bound"
+      >A</a
+      ><a name="2795" class="Symbol"
+      >}</a
+      ><a name="2796"
+      > </a
+      ><a name="2797" href="SystemLol.html#2742" class="Bound"
+      >p</a
+      ><a name="2798"
+      > </a
+      ><a name="2799" class="Symbol"
+      >|</a
+      ><a name="2800"
+      > </a
+      ><a name="2801" href="Prelude.html#2449" class="Function"
+      >lemma-b&#8743;-right</a
+      ><a name="2815"
+      > </a
+      ><a name="2816" class="Symbol"
+      >{</a
+      ><a name="2817"
+      >a </a
+      ><a name="2819" class="Symbol"
+      >=</a
+      ><a name="2820"
+      > </a
+      ><a name="2821" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="2830"
+      > </a
+      ><a name="2831" class="Symbol"
+      >(</a
+      ><a name="2832" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2833"
+      > </a
+      ><a name="2834" href="SystemLol.html#2738" class="Bound"
+      >A</a
+      ><a name="2835" class="Symbol"
+      >)}</a
+      ><a name="2837"
+      > </a
+      ><a name="2838" class="Symbol"
+      >{</a
+      ><a name="2839"
+      >b </a
+      ><a name="2841" class="Symbol"
+      >=</a
+      ><a name="2842"
+      > </a
+      ><a name="2843" href="SystemLol.html#761" class="Function"
+      >no&#9632;</a
+      ><a name="2846"
+      > </a
+      ><a name="2847" href="SystemLol.html#2738" class="Bound"
+      >A</a
+      ><a name="2848" class="Symbol"
+      >}</a
+      ><a name="2849"
+      > </a
+      ><a name="2850" href="SystemLol.html#2742" class="Bound"
+      >p</a
+      ><a name="2851"
+      >
+</a
+      ><a name="2852" class="Symbol"
+      >...</a
+      ><a name="2855"
+      > </a
+      ><a name="2856" class="Symbol"
+      >|</a
+      ><a name="2857"
+      > </a
+      ><a name="2858" href="SystemLol.html#2858" class="Bound"
+      >xx</a
+      ><a name="2860"
+      > </a
+      ><a name="2861" class="Symbol"
+      >|</a
+      ><a name="2862"
+      > </a
+      ><a name="2863" href="SystemLol.html#2863" class="Bound"
+      >yy</a
+      ><a name="2865"
+      > </a
+      ><a name="2866" class="Keyword"
+      >with</a
+      ><a name="2870"
+      > </a
+      ><a name="2871" href="SystemLol.html#2304" class="Function"
+      >lemma-&#9632;</a
+      ><a name="2878"
+      > </a
+      ><a name="2879" class="Symbol"
+      >{</a
+      ><a name="2880" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2881"
+      > </a
+      ><a name="2882" href="SystemLol.html#2738" class="Bound"
+      >A</a
+      ><a name="2883" class="Symbol"
+      >}</a
+      ><a name="2884"
+      > </a
+      ><a name="2885" href="SystemLol.html#2858" class="Bound"
+      >xx</a
+      ><a name="2887"
+      > </a
+      ><a name="2888" href="SystemLol.html#2863" class="Bound"
+      >yy</a
+      ><a name="2890"
+      >
+</a
+      ><a name="2891" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2913"
+      > </a
+      ><a name="2914" class="Symbol"
+      >{</a
+      ><a name="2915" href="SystemLol.html#257" class="InductiveConstructor Operator"
+      >&#9632;</a
+      ><a name="2916"
+      > </a
+      ><a name="2917" class="Symbol"
+      >(</a
+      ><a name="2918" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2919"
+      > </a
+      ><a name="2920" href="SystemLol.html#2920" class="Bound"
+      >A</a
+      ><a name="2921" class="Symbol"
+      >)}</a
+      ><a name="2923"
+      > </a
+      ><a name="2924" href="SystemLol.html#2924" class="Bound"
+      >p</a
+      ><a name="2925"
+      > </a
+      ><a name="2926" class="Symbol"
+      >|</a
+      ><a name="2927"
+      > </a
+      ><a name="2928" href="SystemLol.html#2928" class="Bound"
+      >xx</a
+      ><a name="2930"
+      > </a
+      ><a name="2931" class="Symbol"
+      >|</a
+      ><a name="2932"
+      > </a
+      ><a name="2933" href="SystemLol.html#2933" class="Bound"
+      >yy</a
+      ><a name="2935"
+      > </a
+      ><a name="2936" class="Symbol"
+      >|</a
+      ><a name="2937"
+      > </a
+      ><a name="2938" class="Symbol"
+      >()</a
+      ><a name="2940"
+      >
+</a
+      ><a name="2941" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="2963"
+      > </a
+      ><a name="2964" class="Symbol"
+      >{</a
+      ><a name="2965" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="2966"
+      > </a
+      ><a name="2967" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="2968" class="Symbol"
+      >}</a
+      ><a name="2969"
+      > </a
+      ><a name="2970" href="SystemLol.html#2970" class="Bound"
+      >p</a
+      ><a name="2971"
+      > </a
+      ><a name="2972" class="Keyword"
+      >with</a
+      ><a name="2976"
+      > </a
+      ><a name="2977" href="Prelude.html#2296" class="Function"
+      >lemma-b&#8743;-left</a
+      ><a name="2990"
+      > </a
+      ><a name="2991" class="Symbol"
+      >{</a
+      ><a name="2992"
+      >a </a
+      ><a name="2994" class="Symbol"
+      >=</a
+      ><a name="2995"
+      > </a
+      ><a name="2996" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="3005"
+      > </a
+      ><a name="3006" class="Symbol"
+      >(</a
+      ><a name="3007" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="3008"
+      > </a
+      ><a name="3009" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3010" class="Symbol"
+      >)}</a
+      ><a name="3012"
+      > </a
+      ><a name="3013" class="Symbol"
+      >{</a
+      ><a name="3014"
+      >b </a
+      ><a name="3016" class="Symbol"
+      >=</a
+      ><a name="3017"
+      > </a
+      ><a name="3018" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="3026"
+      > </a
+      ><a name="3027" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3028" class="Symbol"
+      >}</a
+      ><a name="3029"
+      > </a
+      ><a name="3030" href="SystemLol.html#2970" class="Bound"
+      >p</a
+      ><a name="3031"
+      > </a
+      ><a name="3032" class="Symbol"
+      >|</a
+      ><a name="3033"
+      > </a
+      ><a name="3034" href="Prelude.html#2449" class="Function"
+      >lemma-b&#8743;-right</a
+      ><a name="3048"
+      > </a
+      ><a name="3049" class="Symbol"
+      >{</a
+      ><a name="3050"
+      >a </a
+      ><a name="3052" class="Symbol"
+      >=</a
+      ><a name="3053"
+      > </a
+      ><a name="3054" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="3063"
+      > </a
+      ><a name="3064" class="Symbol"
+      >(</a
+      ><a name="3065" href="SystemLol.html#270" class="InductiveConstructor Operator"
+      >&#9679;</a
+      ><a name="3066"
+      > </a
+      ><a name="3067" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3068" class="Symbol"
+      >)}</a
+      ><a name="3070"
+      > </a
+      ><a name="3071" class="Symbol"
+      >{</a
+      ><a name="3072"
+      >b </a
+      ><a name="3074" class="Symbol"
+      >=</a
+      ><a name="3075"
+      > </a
+      ><a name="3076" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="3084"
+      > </a
+      ><a name="3085" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3086" class="Symbol"
+      >}</a
+      ><a name="3087"
+      > </a
+      ><a name="3088" href="SystemLol.html#2970" class="Bound"
+      >p</a
+      ><a name="3089"
+      >
+</a
+      ><a name="3090" class="Symbol"
+      >...</a
+      ><a name="3093"
+      > </a
+      ><a name="3094" class="Symbol"
+      >|</a
+      ><a name="3095"
+      > </a
+      ><a name="3096" href="SystemLol.html#3096" class="Bound"
+      >xx</a
+      ><a name="3098"
+      > </a
+      ><a name="3099" class="Symbol"
+      >|</a
+      ><a name="3100"
+      > </a
+      ><a name="3101" href="SystemLol.html#3101" class="Bound"
+      >yy</a
+      ><a name="3103"
+      > </a
+      ><a name="3104" class="Symbol"
+      >=</a
+      ><a name="3105"
+      > </a
+      ><a name="3106" href="SystemLol.html#467" class="InductiveConstructor"
+      >AI</a
+      ><a name="3108"
+      > </a
+      ><a name="3109" class="Symbol"
+      >(</a
+      ><a name="3110" href="SystemLol.html#2452" class="Function"
+      >theorem-&#8623;-completeness</a
+      ><a name="3132"
+      > </a
+      ><a name="3133" class="Symbol"
+      >{</a
+      ><a name="3134" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3135" class="Symbol"
+      >}</a
+      ><a name="3136"
+      > </a
+      ><a name="3137" class="Symbol"
+      >(</a
+      ><a name="3138" href="Prelude.html#2066" class="Function"
+      >lemma-b&#8743;-ololo</a
+      ><a name="3152"
+      > </a
+      ><a name="3153" class="Symbol"
+      >{</a
+      ><a name="3154"
+      >a </a
+      ><a name="3156" class="Symbol"
+      >=</a
+      ><a name="3157"
+      > </a
+      ><a name="3158" href="SystemLol.html#612" class="Function"
+      >endswith&#9632;</a
+      ><a name="3167"
+      > </a
+      ><a name="3168" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3169" class="Symbol"
+      >}</a
+      ><a name="3170"
+      > </a
+      ><a name="3171" class="Symbol"
+      >{</a
+      ><a name="3172"
+      >b </a
+      ><a name="3174" class="Symbol"
+      >=</a
+      ><a name="3175"
+      > </a
+      ><a name="3176" href="SystemLol.html#826" class="Function"
+      >onlyone&#9632;</a
+      ><a name="3184"
+      > </a
+      ><a name="3185" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3186" class="Symbol"
+      >}</a
+      ><a name="3187"
+      > </a
+      ><a name="3188" class="Symbol"
+      >(</a
+      ><a name="3189" href="SystemLol.html#1605" class="Function"
+      >lemma-&#9679;&#8323;</a
+      ><a name="3197"
+      > </a
+      ><a name="3198" class="Symbol"
+      >{</a
+      ><a name="3199"
+      >A </a
+      ><a name="3201" class="Symbol"
+      >=</a
+      ><a name="3202"
+      > </a
+      ><a name="3203" href="SystemLol.html#2967" class="Bound"
+      >A</a
+      ><a name="3204" class="Symbol"
+      >}</a
+      ><a name="3205"
+      > </a
+      ><a name="3206" href="SystemLol.html#3096" class="Bound"
+      >xx</a
+      ><a name="3208" class="Symbol"
+      >)</a
+      ><a name="3209"
+      > </a
+      ><a name="3210" href="SystemLol.html#3101" class="Bound"
+      >yy</a
+      ><a name="3212" class="Symbol"
+      >))</a
+      ><a name="3214"
+      >
+
+</a
+      ><a name="3216" class="Comment"
+      >-- yay!</a
+      ><a name="3223"
+      >
+</a
+      ></pre
+    ></body
+  ></html
+>

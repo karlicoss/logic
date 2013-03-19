@@ -102,48 +102,48 @@ h2 Z p = Z
 h2 {l1} {l2} {l3} {a} {A} {b} (S pin) p = relax-left ((A ⊃ a) ∷ l3) (p pin)
 
 theorem-deduction-hlaux : ∀ {Γ A al} → A ∷ Γ hl⊢ al → Σ (List CPC) (λ ll → ((Γ hl⊢ ll) × ((a : CPC) → a ∈ al → (A ⊃ a) ∈ ll)))
-theorem-deduction-hlaux {Γ} {A} {[]} H-EM = [] , (H-EM ×i (λ x → λ ()))
+theorem-deduction-hlaux {Γ} {A} {[]} H-EM = [] , < H-EM , (λ x → λ ()) >
 theorem-deduction-hlaux {Γ} {A} {.A ∷ al} (H-AΓ Z p) with theorem-deduction-hlaux {Γ} {A} {al} p
-theorem-deduction-hlaux {Γ} {A} {.A ∷ al} (H-AΓ Z p) | fst , (x ×i y) with H-AI {Γ} {A}
-theorem-deduction-hlaux {Γ} {A} {.A ∷ al} (H-AΓ Z p) | fst₁ , (x ×i y) | fst , snd =
-  (A ⊃ A) ∷ (fst ++ fst₁) , (lemma-proof-concat snd x ×i (λ q x₁ → h2 {l1 = al} {l2 = fst₁} {l3 = fst} (x₁) (y q)))
+theorem-deduction-hlaux {Γ} {A} {.A ∷ al} (H-AΓ Z p) | fst , < x , y > with H-AI {Γ} {A}
+theorem-deduction-hlaux {Γ} {A} {.A ∷ al} (H-AΓ Z p) | fst₁ , < x , y > | fst , snd =
+  (A ⊃ A) ∷ (fst ++ fst₁) , < lemma-proof-concat snd x , (λ q x₁ → h2 {l1 = al} {l2 = fst₁} {l3 = fst} (x₁) (y q)) >
 theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-AΓ (S t) p) with theorem-deduction-hlaux {Γ} {A} {al} p
-theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-AΓ (S t) p) | fst , (x ×i y) =
+theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-AΓ (S t) p) | fst , < x , y > =
   let xxx = H-AΓ t x
       yyy = H-AK {A = a} {B = A} xxx
       zzz = H-IM Z (S Z) yyy
       qqq = (a ⊃ (A ⊃ a)) ∷ a ∷ []
       rrr = (A ⊃ a) ∷ qqq
-  in (rrr ++ fst) , (H-IM Z (S Z) (H-AK (H-AΓ t x)) ×i (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)))
+  in (rrr ++ fst) , < H-IM Z (S Z) (H-AK (H-AΓ t x)) , (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)) >
 theorem-deduction-hlaux {Γ} {A} {(A₁ ⊃ (B ⊃ .A₁)) ∷ al} (H-AK p) with theorem-deduction-hlaux {Γ} {A} {al} p
-theorem-deduction-hlaux {Γ} {A} {(A₁ ⊃ (B ⊃ .A₁)) ∷ al} (H-AK p) | fst , (x ×i y) =
+theorem-deduction-hlaux {Γ} {A} {(A₁ ⊃ (B ⊃ .A₁)) ∷ al} (H-AK p) | fst , < x , y > =
   let qq = A₁ ⊃ (B ⊃ A₁)
       xxx = H-AK {A = A₁} {B = B} x
       yyy = H-AK {A = qq} {B = A} xxx
       zzz = H-IM Z (S Z) yyy
       qqq = (qq ⊃ (A ⊃ qq)) ∷ qq ∷ []
       rrr = (A ⊃ qq) ∷ qqq
-  in (rrr ++ fst) , (H-IM Z (S Z) (H-AK (H-AK x)) ×i (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)))
+  in (rrr ++ fst) , < H-IM Z (S Z) (H-AK (H-AK x)) , (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)) >
 theorem-deduction-hlaux {Γ} {A} {((A₁ ⊃ (B ⊃ C)) ⊃ .((A₁ ⊃ B) ⊃ (A₁ ⊃ C))) ∷ al} (H-AS p) with theorem-deduction-hlaux {Γ} {A} {al} p
-theorem-deduction-hlaux {Γ} {A} {((A₁ ⊃ (B ⊃ C)) ⊃ .((A₁ ⊃ B) ⊃ (A₁ ⊃ C))) ∷ al} (H-AS p) | fst , (x ×i y) =
+theorem-deduction-hlaux {Γ} {A} {((A₁ ⊃ (B ⊃ C)) ⊃ .((A₁ ⊃ B) ⊃ (A₁ ⊃ C))) ∷ al} (H-AS p) | fst , < x , y > =
   let qq = (A₁ ⊃ (B ⊃ C)) ⊃ ((A₁ ⊃ B) ⊃ (A₁ ⊃ C))
       xxx = H-AS {A = A₁} {B = B} {C = C} x
       yyy = H-AK {A = qq} {B = A} xxx
       zzz = H-IM Z (S Z) yyy
       qqq = (qq ⊃ (A ⊃ qq)) ∷ qq ∷ []
       rrr = (A ⊃ qq) ∷ qqq
-  in (rrr ++ fst) , ((H-IM Z (S Z) (H-AK (H-AS x))) ×i (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)))
+  in (rrr ++ fst) , < (H-IM Z (S Z) (H-AK (H-AS x))) , (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)) >
 theorem-deduction-hlaux {Γ} {A} {((¬ A₁ ⊃ ¬ B) ⊃ .((¬ A₁ ⊃ B) ⊃ A₁)) ∷ al} (H-AN p) with theorem-deduction-hlaux {Γ} {A} {al} p
-theorem-deduction-hlaux {Γ} {A} {((¬ A₁ ⊃ ¬ B) ⊃ .((¬ A₁ ⊃ B) ⊃ A₁)) ∷ al} (H-AN p) | fst , (x ×i y) =
+theorem-deduction-hlaux {Γ} {A} {((¬ A₁ ⊃ ¬ B) ⊃ .((¬ A₁ ⊃ B) ⊃ A₁)) ∷ al} (H-AN p) | fst , < x , y > =
   let qq = (¬ A₁ ⊃ ¬ B) ⊃ ((¬ A₁ ⊃ B) ⊃ A₁)
       xxx = H-AN {A = A₁} {B = B} x
       yyy = H-AK {A = qq} {B = A} xxx
       zzz = H-IM Z (S Z) yyy
       qqq = (qq ⊃ (A ⊃ qq)) ∷ qq ∷ []
       rrr = (A ⊃ qq) ∷ qqq
-  in (rrr ++ fst) , (H-IM Z (S Z) (H-AK (H-AN x)) ×i (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)))
+  in (rrr ++ fst) , < H-IM Z (S Z) (H-AK (H-AN x)) , (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)) >
 theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-IM x x₁ p) with theorem-deduction-hlaux {Γ} {A} {al} p
-theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-IM {A = B} {B = .a} x₂ x₃ p) | fst , (x ×i y) =
+theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-IM {A = B} {B = .a} x₂ x₃ p) | fst , < x , y > =
   let AB∈ = y B x₃
       AB→a∈ = y (B ⊃ a) x₂
       xxx = H-AS {A = A} {B = B} {C = a} x
@@ -151,8 +151,8 @@ theorem-deduction-hlaux {Γ} {A} {a ∷ al} (H-IM {A = B} {B = .a} x₂ x₃ p) 
       zzz = H-IM {A = A ⊃ B} {B = A ⊃ a} Z (S (S AB∈)) yyy
       qqq = ((A ⊃ B) ⊃ (A ⊃ a)) ∷ ((A ⊃ (B ⊃ a)) ⊃ ((A ⊃ B) ⊃ (A ⊃ a))) ∷ []
       rrr = (A ⊃ a) ∷ qqq
-  in (rrr ++ fst) , (H-IM Z (S (S (y B x₃))) (H-IM Z (S (y (B ⊃ a) x₂)) (H-AS x)) ×i (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)))
+  in (rrr ++ fst) , < H-IM Z (S (S (y B x₃))) (H-IM Z (S (y (B ⊃ a) x₂)) (H-AS x)) , (λ q x₁ → h2 {l1 = al} {l2 = fst} {l3 = qqq} x₁ (y q)) >
 
 theorem-deduction-hl : ∀ {Γ A B} → A ∷ Γ h⊢ B → Γ h⊢ (A ⊃ B)
 theorem-deduction-hl (fst , snd) with theorem-deduction-hlaux snd
-theorem-deduction-hl {Γ} {A} {B} (fst , snd) | fst₁ , (x ×i y) = lemma-inproof (y B Z) x
+theorem-deduction-hl {Γ} {A} {B} (fst , snd) | fst₁ , < x , y > = lemma-inproof (y B Z) x

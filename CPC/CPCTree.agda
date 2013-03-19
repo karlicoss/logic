@@ -5,6 +5,8 @@ module CPCTree (NVars : ℕ) where
 open import CPCCommon NVars
 open import CPCHilbert NVars
 
+import CPCCommon
+
 data _t⊢_ (Γ : List CPC) : CPC → Set where
   T-AΓ : ∀ {A} → A ∈ Γ → Γ t⊢ A
   T-AN : ∀ {A B} → Γ t⊢ AN {A} {B}
@@ -310,7 +312,7 @@ vars : (N : ℕ) → List (Fin N)
 vars zero = []
 vars (succ N) = []-reverse (varsh (succ N) N lemma-n<-succ)
 
-varstfh : List (Fin (NVars)) → List (List CPC)
+varstfh : List (Fin NVars) → List (List CPC)
 varstfh [] = []
 varstfh (x ∷ xs) =
   let vv = varstfh xs
@@ -319,7 +321,30 @@ varstfh (x ∷ xs) =
 varstf : List (List CPC)
 varstf = varstfh (vars NVars)
 
+restrict-eval : ∀ {N} → (ev : Fin (succ N) → Bool) → (Fin N → Bool)
+restrict-eval ev n = ev (fsucc n)
 
+makelisthh : (N : ℕ) → (Fin N) → (ev : (Fin N) → Bool) → List (CPCCommon.CPC N)
+makelisthh zero () ev
+makelisthh (succ N) fzero ev = (if ev fzero then (CPCCommon.⋆ fzero) else (CPCCommon.¬ (CPCCommon.⋆ fzero))) ∷ []
+makelisthh (succ N) (fsucc v) ev = (if ev (fsucc v) then CPCCommon.⋆ (fsucc v) else (CPCCommon.¬ (CPCCommon.⋆ (fsucc v)))) ∷ {!!}
+
+makelisth : V → (ev : V → Bool) → List CPC
+makelisth v ev with NVars
+makelisth () ev | zero
+makelisth v ev | succ xx = if ev v then {!!} ∷ [] else {!!}
+
+makelist : (ev : V → Bool) → List CPC
+makelist ev = {!!}
+
+www : (ev : V → Bool) → Σ (List CPC) (λ l → (v : V) → if ev v then (⋆ v) ∈ l else (¬ (⋆ v) ∈ l)) 
+www ev = {!!} , {!!}
+
+qqq : (a : CPC) → (ev : V → Bool) → Σ (List CPC) (λ l → (v : V) → if ev v then (⋆ v) ∈ l else (¬ (⋆ v) ∈ l)) 
+qqq a ev = {!!} , {!!}
+
+listprf : List ((List CPC) × CPC)
+listprf = {!!}
 
 {-
 evlist : (f : V → Bool) → List CPC

@@ -75,8 +75,13 @@ open Σ public
 infix 40 _×_
 
 data _×_ (P : Set) (Q : Set) : Set where
-  _×i_ : P → Q → P × Q
+  <_,_> : P → Q → P × Q
 
+×fst : ∀ {P Q} → P × Q → P
+×fst < p , q > = p
+
+×snd : ∀ {P Q} → P × Q → Q
+×snd < p , q > = q
 
 
 data Bool : Set where
@@ -131,6 +136,20 @@ lemma-b∧-right : ∀ {a b} → a b∧ b ≡ true → b ≡ true
 lemma-b∧-right {a} {true} p = refl
 lemma-b∧-right {true} {false} p = p
 lemma-b∧-right {false} {false} p = p
+
+postulate Level : Set
+postulate lzero : Level
+postulate lsucc : Level → Level
+postulate _⊔_   : Level → Level → Level
+
+{-# BUILTIN LEVEL     Level #-}
+{-# BUILTIN LEVELZERO lzero #-}
+{-# BUILTIN LEVELSUC  lsucc #-}
+{-# BUILTIN LEVELMAX  _⊔_   #-}
+
+if_then_else : {α : Level} {A : Set α} → Bool → A → A → A
+if true then t else e = t
+if false then t else e = e
 
 data ℕ : Set where
   zero : ℕ
@@ -240,5 +259,16 @@ data Fin : ℕ → Set where
   fzero : {n : ℕ} → Fin (succ n)
   fsucc : {n : ℕ} → Fin n → Fin (succ n)
 
+i1 : Fin (succ zero)
+i1 = fzero {zero}
 
+i2 : Fin (succ (succ zero))
+i2 = fsucc {succ zero} i1
 
+fmax : {n : ℕ} → Fin (succ n)
+fmax {zero} = fzero
+fmax {succ n} = fsucc (fmax {n})
+
+femb : {n : ℕ} → Fin n → Fin (succ n)
+femb fzero = fzero
+femb (fsucc i) = fsucc (femb i)

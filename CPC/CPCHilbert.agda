@@ -1,7 +1,8 @@
-module CPCHilbert (V : Set) where
-
 open import Prelude
-open import CPCCommon V
+
+module CPCHilbert (N : ℕ) where
+
+open import CPCCommon N
 
 data _hl⊢_ (Γ : List CPC) : List CPC → Set where
   H-EM : Γ hl⊢ []

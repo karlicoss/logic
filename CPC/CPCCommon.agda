@@ -1,6 +1,8 @@
-module CPCCommon (V : Set) where
-
 open import Prelude
+
+module CPCCommon (N : ℕ) where
+
+V = Fin N
 
 infix 50 _⊃_
 infix 60 _∨_

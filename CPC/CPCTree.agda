@@ -1,8 +1,9 @@
-module CPCTree (V : Set) where
-
 open import Prelude
-open import CPCCommon V
-open import CPCHilbert V
+
+module CPCTree (NVars : ℕ) where
+
+open import CPCCommon NVars
+open import CPCHilbert NVars
 
 data _t⊢_ (Γ : List CPC) : CPC → Set where
   T-AΓ : ∀ {A} → A ∈ Γ → Γ t⊢ A
@@ -253,12 +254,24 @@ lemma-[]⊬a {a} (T-IM t s) = {!!}
 lemma-∨-alala : ∀ {Γ A B} → A ∨ ¬ A ∷ Γ t⊢ B → Γ t⊢ B
 lemma-∨-alala {Γ} {A} {B} p = lemma-proof-donotneed p T-AI
 
+{-
 lemma-∨-ololo : ∀ {Γ A B C} → Γ t⊢ A ⊃ B → Γ t⊢ ¬ A ⊃ C → Γ t⊢ B ∨ C
 lemma-∨-ololo {Γ} {A} {B} {C} pb pc with theorem-deduction-rev-t pb | theorem-deduction-rev-t pc
 ... | xx | yy = {!!}
+-}
 
-lemma-∨-azaza : ∀ {Γ A B C} → A ∷ Γ t⊢ C → B ∷ Γ t⊢ C → A ∨ B ∷ Γ t⊢ C
-lemma-∨-azaza {Γ} {A} {B} {C} pa pb = {!!}
+lemma-proof-inevitability : ∀ {Γ A B} → Γ t⊢ (A ⊃ B) ⊃ ((¬ A ⊃ B) ⊃ B)
+lemma-proof-inevitability {Γ} {A} {B} =
+  let Γ₂ = ¬ A ⊃ B ∷ A ⊃ B ∷ Γ
+      xx₂ : Γ₂ t⊢ ¬ B ⊃ ¬ (¬ A)
+      xx₂ = T-IM (T-AΓ Z) lemma-⊃-transpose
+      xx : Γ₂ t⊢ ¬ B ⊃ A
+      xx = theorem-deduction-t (T-IM (theorem-deduction-rev-t xx₂) lemma-¬¬-elim)
+      yy : Γ₂ t⊢ ¬ B ⊃ ¬ A
+      yy = T-IM (T-AΓ (S Z)) lemma-⊃-transpose
+      qq : Γ₂ t⊢ ¬ (¬ B)
+      qq = T-IM yy (T-IM xx T-ANn)
+  in theorem-deduction-t (theorem-deduction-t (T-IM qq lemma-¬¬-elim))
 
 lemma-proof-drop-redundant : ∀ {Γ A B} → A ∷ Γ t⊢ B → ¬ A ∷ Γ t⊢ B → Γ t⊢ B
 lemma-proof-drop-redundant {Γ} {A} {B} pa pna =
@@ -266,13 +279,13 @@ lemma-proof-drop-redundant {Γ} {A} {B} pa pna =
       xa = theorem-deduction-t pa
       xb : Γ t⊢ ¬ A ⊃ B
       xb = theorem-deduction-t pna
-      b∨b : Γ t⊢ B ∨ B
-      b∨b = lemma-∨-ololo {Γ} {A} {B} {B} xa xb 
-  in T-IM b∨b lemma-∨-elim
+  in T-IM xb (T-IM xa lemma-proof-inevitability)
 
+{-
 -- is it true at all?
 lemma-invalid⊨-any : ∀ {A B} → c⊮ A → A ∷ [] t⊢ B
 lemma-invalid⊨-any {A} {B} inv = {!!}
+-}
 
 -- lemma-composition : ∀ 
 
@@ -280,14 +293,48 @@ lemma-invalid-var : ∀ {v} → c⊮ ⋆ v
 lemma-invalid-var {v} ev with ev (λ v → false)
 lemma-invalid-var ev | ()
 
+tofin : {n N : ℕ} → n n< N → Fin N
+tofin {zero} {zero} ()
+tofin {zero} {succ N} p = fzero
+tofin {succ n} {zero} ()
+tofin {succ n} {succ N} p =
+  let tf : Fin N
+      tf = tofin {n} {N} (lemma-n<-elim-succ-both p)
+  in fsucc tf
+
+varsh : (N : ℕ) → (c : ℕ) → c n< N → List (Fin N)
+varsh N zero p = tofin p ∷ []
+varsh N (succ c) p = tofin p ∷ varsh N c (lemma-n<-elim-succ-left p)
+  
+vars : (N : ℕ) → List (Fin N)
+vars zero = []
+vars (succ N) = []-reverse (varsh (succ N) N lemma-n<-succ)
+
+varstfh : List (Fin (NVars)) → List (List CPC)
+varstfh [] = []
+varstfh (x ∷ xs) =
+  let vv = varstfh xs
+  in map (λ l → (⋆ x) ∷ l) vv ++ map (λ l → ¬ (⋆ x) ∷ l) vv
+
+varstf : List (List CPC)
+varstf = varstfh (vars NVars)
+
+
+
+{-
+evlist : (f : V → Bool) → List CPC
+evlist f = {!!}
+
+lemma-lol : ∀ {A f} → {!!}
+lemma-lol = {!!}
+
 -- what do I want to prove here?
-lemma-completeness-¬ : ∀ {A} → (V → Bool) → [] t⊢ ¬ A
-lemma-completeness-¬ {A} ev with eval ev A
-lemma-completeness-¬ {A} ev | true = {!!}
-lemma-completeness-¬ {A} ev | false = {!!}
+lemma-completeness-¬ : ∀ {A} → c⊨ ¬ A → [] t⊢ ¬ A
+lemma-completeness-¬ {A} p = {!!} 
 
 theorem-completeness : ∀ {A} → c⊨ A → [] t⊢ A
 theorem-completeness {⋆ x} taut with lemma-invalid-var taut
 theorem-completeness {⋆ x} taut | ()
 theorem-completeness {A ⊃ B} taut = {!!}
 theorem-completeness {¬ A} taut = {!!}
+-}

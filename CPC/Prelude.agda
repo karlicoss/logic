@@ -1,5 +1,10 @@
 module Prelude where
 
+data ⊥ : Set where
+
+bot-elim : (A : Set) → ⊥ → A
+bot-elim a ()
+
 infix 10 _≡_
 data _≡_ {A : Set} (x : A) : A → Set where
   refl : x ≡ x
@@ -17,6 +22,10 @@ _~_ = trans
 cong : ∀ {A B} {a b : A} → (f : A → B) → a ≡ b → (f a) ≡ (f b)
 cong f refl = refl
 
+data Dec (A : Set) : Set where
+  yes : (a : A) → Dec A
+  no  : (¬a : A → ⊥) → Dec A
+
 infixr 40 _∷_
 data List (A : Set) : Set where
   [] : List A                            -- an empty list
@@ -27,7 +36,11 @@ data List (A : Set) : Set where
 _++_ : ∀ {A} → List A → List A → List A
 [] ++ bs = bs
 (a ∷ as) ++ bs = a ∷ (as ++ bs)
-  
+
+map : ∀ {A B} → (A → B) → List A → List B
+map f [] = []
+map f (x ∷ xs) = f x ∷ map f xs
+
 data _∈_ {A : Set} : A → List A → Set where
   Z : {a : A}{as : List A} → a ∈ (a ∷ as)            -- "a" is in a head of a list
   S : {a b : A}{as : List A} → a ∈ as → a ∈ (b ∷ as) -- "a" is in a tail somewhere
@@ -41,6 +54,15 @@ relax-right (S y) = S (relax-right y)
 relax-left : ∀ {A} {x : A} as {bs} → x ∈ bs → x ∈ (as ++ bs)
 relax-left [] p = p
 relax-left (a ∷ as) p = S (relax-left as p)
+
+[]-reverseh : ∀ {A} → List A → List A → List A
+[]-reverseh acc [] = acc
+[]-reverseh acc (a ∷ l) = []-reverseh (a ∷ acc) l
+
+[]-reverse : ∀ {A} → List A → List A
+[]-reverse l = []-reverseh [] l
+
+-- TODO prove reverse!
 
 record Σ (A : Set) (B : A → Set) : Set where
   constructor _,_
@@ -56,13 +78,15 @@ data _×_ (P : Set) (Q : Set) : Set where
   _×i_ : P → Q → P × Q
 
 
-data ⊥ : Set where
-
-bot-elim : (A : Set) → ⊥ → A
-bot-elim a ()
 
 data Bool : Set where
   true false : Bool
+
+_b=?_ : (a b : Bool) → Dec (a ≡ b)
+true b=? true = yes refl
+true b=? false = no (λ ())
+false b=? true = no (λ ())
+false b=? false = yes refl
 
 data _b=_ : Bool → Bool → Set where
   ET : true b= true
@@ -112,6 +136,81 @@ data ℕ : Set where
   zero : ℕ
   succ : ℕ → ℕ
 
+-- TODO make private
+lemma-nozero-pred : ∀ {a : ℕ} → succ a ≡ zero → ⊥
+lemma-nozero-pred ()
+
+-- TODO make private
+lemma-succ-qqq : ∀ {a b : ℕ} → (succ a ≡ succ b) → a ≡ b
+lemma-succ-qqq refl = refl
+
+-- TODO make private
+lemma-qqq : ∀ {a b : ℕ} → (a ≡ b → ⊥) → ((succ a) ≡ (succ b) → ⊥)
+lemma-qqq {a} {b} p ps = p (lemma-succ-qqq ps)
+
+
+data _n>_ : ℕ → ℕ → Set where
+  n>-zero : {a : ℕ} → (succ a) n> zero
+  n>-succ : {a b : ℕ} → a n> b → (succ a) n> (succ b)
+
+data _n<_ : ℕ → ℕ → Set where
+  n<-zero : {b : ℕ} → zero n< succ (b)
+  n<-succ : {a b : ℕ} → a n< b → (succ a) n< (succ b)
+  
+_gt_ : (a b : ℕ) → Bool
+zero gt b = false
+a gt zero = true
+(succ a) gt (succ b) = a gt b
+
+lemma-gt : ∀ {a b} → a n> b → a gt b ≡ true
+lemma-gt n>-zero = refl
+lemma-gt (n>-succ p) = lemma-gt p
+
+lemma-gt-rev : ∀ {a b} → a gt b ≡ true → a n> b
+lemma-gt-rev {zero} {zero} ()
+lemma-gt-rev {succ a} {zero} p = n>-zero
+lemma-gt-rev {zero} {succ b} ()
+lemma-gt-rev {succ a} {succ b} p = n>-succ (lemma-gt-rev p)
+
+lemma-n<-succ : ∀ {a} → a n< succ a
+lemma-n<-succ {zero} = n<-zero
+lemma-n<-succ {succ a} = n<-succ lemma-n<-succ
+
+lemma-n<-elim-succ-left : ∀ {a b} → (succ a) n< b → a n< b
+lemma-n<-elim-succ-left {zero} {zero} ()
+lemma-n<-elim-succ-left {zero} {succ b} p = n<-zero
+lemma-n<-elim-succ-left {succ a} {zero} ()
+lemma-n<-elim-succ-left {succ a} {succ b} (n<-succ p) = n<-succ (lemma-n<-elim-succ-left p)
+
+lemma-n<-elim-succ-both : ∀ {a b} → (succ a n< succ b) → a n< b
+lemma-n<-elim-succ-both {zero} {zero} (n<-succ p) = p
+lemma-n<-elim-succ-both {zero} {succ b} p = n<-zero
+lemma-n<-elim-succ-both {succ a} {zero} (n<-succ ())
+lemma-n<-elim-succ-both {succ a} {succ b} (n<-succ p) = p
+
+_lt_ : (a b : ℕ) → Bool
+a lt zero = false
+zero lt b = true
+(succ a) lt (succ b) = a lt b
+
+lemma-lt : ∀ {a b} → a n< b → a lt b ≡ true
+lemma-lt n<-zero = refl
+lemma-lt (n<-succ p) = lemma-lt p
+
+lemma-lt-rev : ∀ {a b} → a lt b ≡ true → a n< b
+lemma-lt-rev {zero} {zero} ()
+lemma-lt-rev {zero} {succ b} p = n<-zero
+lemma-lt-rev {succ a} {zero} ()
+lemma-lt-rev {succ a} {succ b} p = n<-succ (lemma-lt-rev p)
+
+_n=?_ : (a b : ℕ) → Dec (a ≡ b)
+zero n=? zero = yes refl
+zero n=? succ b = no (λ ())
+succ a n=? zero = no (λ ())
+succ a n=? succ b with a n=? b
+succ a n=? succ .a | yes refl = yes refl
+succ a n=? succ b | no ¬a = no (lemma-qqq ¬a)
+
 _n+_ : ℕ → ℕ → ℕ
 zero n+ b = b
 (succ a) n+ b = succ (a n+ b)
@@ -140,3 +239,6 @@ lemma-n+-assoc {succ a} {b} {c} = cong succ (lemma-n+-assoc {a = a} {b = b} {c =
 data Fin : ℕ → Set where
   fzero : {n : ℕ} → Fin (succ n)
   fsucc : {n : ℕ} → Fin n → Fin (succ n)
+
+
+

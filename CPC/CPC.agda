@@ -2,12 +2,11 @@ module CPC where
 
 open import Prelude
 
-data V : Set where
-  varA varB varC varD varE : V
+N = succ (succ (succ zero))
 
-open import CPCCommon V
-open import CPCHilbert V
-open import CPCTree V
+open import CPCCommon N
+open import CPCHilbert N
+open import CPCTree N
 
 T-AI₂ : ∀ {Γ A} → Γ t⊢ (A ⊃ A)
 T-AI₂ {Γ} {A} = t→h (H-AI {Γ} {A})

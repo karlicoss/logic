@@ -324,6 +324,8 @@ varstf = varstfh (vars NVars)
 restrict-eval : ∀ {N} → (ev : Fin (succ N) → Bool) → (Fin N → Bool)
 restrict-eval ev n = ev (fsucc n)
 
+{-
+
 makelisthh : (N : ℕ) → (Fin N) → (ev : (Fin N) → Bool) → List (CPCCommon.CPC N)
 makelisthh zero () ev
 makelisthh (succ N) fzero ev = (if ev fzero then (CPCCommon.⋆ fzero) else (CPCCommon.¬ (CPCCommon.⋆ fzero))) ∷ []
@@ -345,7 +347,7 @@ qqq a ev = {!!} , {!!}
 
 listprf : List ((List CPC) × CPC)
 listprf = {!!}
-
+-}
 {-
 evlist : (f : V → Bool) → List CPC
 evlist f = {!!}

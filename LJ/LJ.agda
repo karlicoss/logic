@@ -65,8 +65,8 @@ module LJ (V : Set) (cmpv : (a b : V) → Dec (a ≡ b)) where
     S-R : ∀ {Γ A} → Γ s⊢ ø → Γ s⊢ rhs A
     S-W : ∀ {Γ Δ A} → Γ s⊢ A → Γ ∷ Δ s⊢ A
   
-  lemma-a¬a : ∀ {A} → (el A) ∷ (el l¬ A) s⊢ ø
-  lemma-a¬a {A} = S-E SW (S-¬L (S-I Z))
+  lemma-a¬a : ∀ {A Γ} → (el A) ∷ (el l¬ A) ∷ Γ s⊢ ø
+  lemma-a¬a {A} {Γ} = S-E SWL (S-¬L (S-I (SL Z)))
 
   lemma-a⊃b⊃a : ∀ {Γ A B} → Γ s⊢ rhs A ⊃ (B ⊃ A)
   lemma-a⊃b⊃a {Γ} {A} {B} = S-→R (S-→R (S-I (SR (SL Z))))

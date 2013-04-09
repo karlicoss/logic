@@ -60,11 +60,14 @@ module LJ (V : Set) (cmpv : (a b : V) → Dec (a ≡ b)) where
     S-¬R : ∀ {Γ A} → (el A) ∷ Γ s⊢ ø → Γ s⊢ rhs (l¬ A)
     S-→L : ∀ {Γ A B C} → Γ s⊢ rhs A → (el B) ∷ Γ s⊢ C → (el (A ⊃ B)) ∷ Γ s⊢ C
     S-→R : ∀ {Γ A B} → (el A) ∷ Γ s⊢ rhs B → Γ s⊢ rhs (A ⊃ B)
+    S-C : ∀ {Γ Δ A B} → Γ s⊢ rhs A → (el A) ∷ Δ s⊢ rhs B → Γ ∷ Δ s⊢ rhs B
     S-E : ∀ {Γ Δ A} → Γ s♯ Δ → Γ s⊢ A → Δ s⊢ A
+    S-R : ∀ {Γ A} → Γ s⊢ ø → Γ s⊢ rhs A
+    S-W : ∀ {Γ Δ A} → Γ s⊢ A → Γ ∷ Δ s⊢ A
   
   lemma-a¬a : ∀ {A} → (el A) ∷ (el l¬ A) s⊢ ø
   lemma-a¬a {A} = S-E SW (S-¬L (S-I Z))
-  
+
   lemma-a⊃b⊃a : ∀ {Γ A B} → Γ s⊢ rhs A ⊃ (B ⊃ A)
   lemma-a⊃b⊃a {Γ} {A} {B} = S-→R (S-→R (S-I (SR (SL Z))))
   
@@ -75,3 +78,17 @@ module LJ (V : Set) (cmpv : (a b : V) → Dec (a ≡ b)) where
         pexch : Δ s♯ Γ₂
         pexch = SL SWL s∙ SWL s∙ SL SWL
     in S-→R (S-→R (S-→R (S-E pexch (S-→L (S-I (SR (SL Z))) (S-E SWL (S-→L (S-I (SR (SL Z))) (S-E SWL (S-→L (S-I (SL Z)) (S-I (SL Z))))))))))
+
+  lemma-ded : ∀ {Γ A B} → Γ s⊢ rhs (A ⊃ B) → (el A) ∷ Γ s⊢ rhs B
+  lemma-ded (S-I Z) = S-E SW (S-→L (S-I Z) (S-I (SL Z)))
+  lemma-ded (S-I (SL x)) = S-E RR (S-W (lemma-ded (S-I x)))
+  lemma-ded (S-I (SR x)) = S-E (TR SW SWL) (S-W (lemma-ded (S-I x)))
+  lemma-ded (S-→L pab pab₁) = S-E SWL (S-→L (S-E SW (S-W pab)) (S-E SWL (lemma-ded pab₁)))
+  lemma-ded (S-→R pab) = pab
+  lemma-ded (S-C pab pab₁) = S-E SWL (S-C pab (S-E SWL (lemma-ded pab₁)))
+  lemma-ded (S-E x pab) = S-E (SL x) (lemma-ded pab)
+  lemma-ded (S-R pab) = S-E SW (S-R (S-W pab))
+  lemma-ded (S-W pab) = S-E RR (S-W (lemma-ded pab))
+   
+  lemma-mp : ∀ {Γ A B} → Γ s⊢ rhs A → Γ s⊢ rhs (A ⊃ B) → Γ s⊢ rhs B
+  lemma-mp pa pab = S-E CP (S-C pa (lemma-ded pab))

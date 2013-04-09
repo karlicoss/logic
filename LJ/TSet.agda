@@ -49,6 +49,8 @@ data _s♯_ { A : Set} : TSet A → TSet A → Set where
   Z : ø s♯ ø
   SL : ∀ {a sa sb} → sa s♯ sb → a ∷ sa s♯ a ∷ sb
   SR : ∀ {a sa sb} → sa s♯ sb → sa ∷ a s♯ sb ∷ a
+  SEL : ∀ {a} → a s♯ ø ∷ a
+  SER : ∀ {a} → a s♯ a ∷ ø
   SW : ∀ {a b} → a ∷ b s♯ b ∷ a
   SWL : ∀ {a b c} → a ∷ (b ∷ c) s♯ b ∷ (a ∷ c)
   SWR : ∀ {a b c} → (a ∷ b) ∷ c s♯ (a ∷ c) ∷ b
@@ -56,6 +58,7 @@ data _s♯_ { A : Set} : TSet A → TSet A → Set where
   RR : ∀ {a b c} → (a ∷ b) ∷ c s♯ a ∷ (b ∷ c)
   TR : ∀ {a b c} → a s♯ b → b s♯ c → a s♯ c
   SIMM : ∀ {a b} → a s♯ b → b s♯ a
+  CP : ∀ {a} → a ∷ a s♯ a
   
 infixr 10 _s∙_
 _s∙_ : {A : Set} {p q r : TSet A} → p s♯ q → q s♯ r → p s♯ r

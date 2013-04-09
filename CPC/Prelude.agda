@@ -83,6 +83,11 @@ data _×_ (P : Set) (Q : Set) : Set where
 ×snd : ∀ {P Q} → P × Q → Q
 ×snd < p , q > = q
 
+infix 40 _∨_
+data _∨_ (P Q : Set) : Set where
+  injl : P → P ∨ Q
+  injr : Q → P ∨ Q
+
 
 data Bool : Set where
   true false : Bool

@@ -1,6 +1,11 @@
+open import Data.Bool
+open import Data.List
+open import Relation.Binary.PropositionalEquality
+open import MyPrelude
+
 module SystemLol where
 
-open import Prelude
+-- open import Prelude
 
 -- ▬ is \re
 -- ■ is \sq
@@ -51,7 +56,7 @@ onlyone■ (● f) = onlyone■ f
 -- a 'good sequence', that is, contains exactly one ■ which is at the
 -- end of the formula
 goodseq : ↯ → Bool
-goodseq f = endswith■ f b∧ onlyone■ f
+goodseq f = endswith■ f ∧ onlyone■ f
 
 -- some useful lemmas
 
@@ -85,7 +90,7 @@ theorem-↯-consistency {● A} (AI {.A} p) with theorem-↯-consistency p
 -- exactly one ■ at the end is deducible
 
 -- formula ending with ■ has to contain at least one square!
-lemma-■ : ∀ {A} → endswith■ A ≡ true → no■ A ≡ true → ⊥
+lemma-■ : ∀ {A} → endswith■ A ≡ true → no■ A ≢ true
 lemma-■ {▬} () n
 lemma-■ {■ A} e ()
 lemma-■ {● A} e n = lemma-■ {A} (lemma-●₃ {A = A} e) n

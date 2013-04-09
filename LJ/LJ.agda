@@ -4,7 +4,7 @@ open import Relation.Binary.PropositionalEquality
 open import Data.Sum
 open import TSet
 
-module SJ (V : Set) (cmpv : (a b : V) → Dec (a ≡ b)) where
+module LJ (V : Set) (cmpv : (a b : V) → Dec (a ≡ b)) where
   infix 50 _⊃_
   data IPC : Set where
     ⋆_ : V → IPC

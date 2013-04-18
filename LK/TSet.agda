@@ -47,7 +47,8 @@ module TSetOps (A : Set) (cmp : (a : A) → (b : A) → Dec (a ≡ b)) where
 
 data _♯_ { A : Set} : TSet A → TSet A → Set where
   REFL : ∀ {S} → S ♯ S
---  E : ∀ {a} → e a ♯ e a
+  SIMM : ∀ {S T} → S ♯ T → T ♯ S
+  TRANS : ∀ {S T U} → S ♯ T → T ♯ U → S ♯ U
   AL : ∀ {S T U} → S ♯ T → U ∷ S ♯ U ∷ T
   AR : ∀ {S T U} → S ♯ T → S ∷ U ♯ T ∷ U
   AZL : ∀ {S} → S ♯ ø ∷ S
@@ -60,79 +61,10 @@ data _♯_ { A : Set} : TSet A → TSet A → Set where
   RTL : ∀ {S T U} → S ∷ (T ∷ U) ♯ (S ∷ T) ∷ U
   RTR : ∀ {S T U} → (S ∷ T) ∷ U ♯ S ∷ (T ∷ U)
 
-lem-♯-sim : ∀ {A} → {S T : TSet A} → S ♯ T → T ♯ S 
-lem-♯-sim REFL = REFL
-lem-♯-sim (AL p) = AL (lem-♯-sim p)
-lem-♯-sim (AR p) = AR (lem-♯-sim p)
-lem-♯-sim AZL = RZL
-lem-♯-sim AZR = RZR
-lem-♯-sim RZL = AZL
-lem-♯-sim RZR = AZR
-lem-♯-sim SW = SW
-lem-♯-sim SWL = SWL
-lem-♯-sim SWR = SWR
-lem-♯-sim RTL = RTR
-lem-♯-sim RTR = RTL
-
-lem-♯-comb : ∀ {A} → {S T U V : TSet A} → S ♯ T → U ♯ V → S ∷ U ♯ T ∷ V
-lem-♯-comb REFL q = AL q
-lem-♯-comb (AL p) q with lem-♯-comb p q
-... | xx = {!!}
-lem-♯-comb (AR p) q = {!!}
-lem-♯-comb AZL q = {!!}
-lem-♯-comb AZR q = {!!}
-lem-♯-comb RZL q = {!!}
-lem-♯-comb RZR q = {!!}
-lem-♯-comb SW q = {!!}
-lem-♯-comb SWL q = {!!}
-lem-♯-comb SWR q = {!!}
-lem-♯-comb RTL q = {!!}
-lem-♯-comb RTR q = {!!}
+infixr 10 _♯∙_
+_♯∙_ : {A : Set} {S T U : TSet A} → S ♯ T → T ♯ U → S ♯ U
+_♯∙_ = TRANS
 
 
-lem-♯-trans : ∀ {A} → {S T U : TSet A} → S ♯ T → T ♯ U → S ♯ U
-lem-♯-trans REFL q = q
-lem-♯-trans (AL p) REFL = AL p
-lem-♯-trans (AL p) (AL q) = AL (lem-♯-trans p q)
-lem-♯-trans (AL p) (AR q) = {!!}
-lem-♯-trans (AL p) AZL = lem-♯-sim {!!}
-lem-♯-trans (AL p) AZR = {!!}
-lem-♯-trans (AL p) RZL = {!!}
-lem-♯-trans (AL p) RZR = {!!}
-lem-♯-trans (AL p) SW = {!!}
-lem-♯-trans (AL p) SWL = {!!}
-lem-♯-trans (AL p) SWR = {!!}
-lem-♯-trans (AL p) RTL = {!!}
-lem-♯-trans (AL p) RTR = {!!}
-lem-♯-trans (AR p) q = {!!}
-lem-♯-trans AZL q = {!!}
-lem-♯-trans AZR q = {!!}
-lem-♯-trans RZL q = {!!}
-lem-♯-trans RZR q = {!!}
-lem-♯-trans SW q = {!!}
-lem-♯-trans SWL q = {!!}
-lem-♯-trans SWR q = {!!}
-lem-♯-trans RTL q = {!!}
-lem-♯-trans RTR q = {!!}
-
---   AL : ∀ {a sa sb} → sa s♯ sb → a ∷ sa s♯ a ∷ sb
---   AR : ∀ {a sa sb} → sa s♯ sb → sa ∷ a s♯ sb ∷ a
---   
---   SEL : ∀ {a} → a s♯ ø ∷ a
---   SER : ∀ {a} → a s♯ a ∷ ø
---   SW : ∀ {a b} → a ∷ b s♯ b ∷ a
---   SWL : ∀ {a b c} → a ∷ (b ∷ c) s♯ b ∷ (a ∷ c)
---   SWR : ∀ {a b c} → (a ∷ b) ∷ c s♯ (a ∷ c) ∷ b
---   RL : ∀ {a b c} → a ∷ (b ∷ c) s♯ (a ∷ b) ∷ c
---   RR : ∀ {a b c} → (a ∷ b) ∷ c s♯ a ∷ (b ∷ c)
---   TR : ∀ {a b c} → a s♯ b → b s♯ c → a s♯ c
---   SIMM : ∀ {a b} → a s♯ b → b s♯ a
---   CP : ∀ {a} → a ∷ a s♯ a
-  
-infixr 10 _s∙_
-_s∙_ : {A : Set} {p q r : TSet A} → p ♯ q → q ♯ r → p ♯ r
-_s∙_ = {!!}
-
-
--- lemma-ooo : ((e 0) ∷ (e 1)) ∷ ((e 2) ∷ (e 3)) s♯ ((e 3) ∷ (e 2)) ∷ ((e 1) ∷ (e 0))
--- lemma-ooo = RR s∙ (SL (SL SW) s∙ SL SWL s∙ SWL s∙ SL (SL SW s∙ SWL s∙ SL SW)) s∙ RL
+lemma-ooo : ((e 0) ∷ (e 1)) ∷ ((e 2) ∷ (e 3)) ♯ ((e 3) ∷ (e 2)) ∷ ((e 1) ∷ (e 0))
+lemma-ooo = RTR ♯∙ AL (AL SW) ♯∙ AL SWL ♯∙ SWL ♯∙ AL (AL SW ♯∙ SWL ♯∙ AL SW) ♯∙ RTL
